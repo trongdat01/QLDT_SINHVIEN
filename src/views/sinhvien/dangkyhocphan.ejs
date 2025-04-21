@@ -374,7 +374,7 @@
                             <div class="col-lg-6">
                                 <div class="card course-card">
                                     <div class="card-header">
-                                        <i class="fas fa-book-open mr-2"></i> Danh sách học phần
+                                        <i class="fas fa-book-open mr-2"></i> Danh sách học phần của bạn
                                     </div>
                                     <div class="card-body">
                                         <div class="search-container">
@@ -414,73 +414,65 @@
                                                             <i class="fas fa-calendar-check"></i>
                                                             <span>Học kỳ: <%= course.hocki %></span>
                                                         </div>
+                                                        <div class="course-info">
+                                                            <i class="fas fa-clipboard-check"></i>
+                                                            <span>Trạng thái:
+                                                                <strong
+                                                                    class="<%= course.trangthaidangky === 'chưa đăng ký' ? 'text-warning' : 
+                                                                    (course.trangthaidangky === 'đã đăng ký' ? 'text-success' : 'text-danger') %>">
+                                                                    <%= course.trangthaidangky==='chưa đăng ký'
+                                                                        ? 'Chờ xác nhận' :
+                                                                        (course.trangthaidangky==='đã đăng ký'
+                                                                        ? 'Đã đăng ký' : 'Đã hủy' ) %>
+                                                                </strong>
+                                                            </span>
+                                                        </div>
 
-                                                        <% /* Check if already registered */ var isRegistered=false; var
-                                                            status="" ; if (registrations && registrations.length> 0) {
-                                                            registrations.forEach(function(reg) {
-                                                            if (reg.mahocphan === course.mahocphan) {
-                                                            isRegistered = true;
-                                                            status = reg.trangthaidangky;
-                                                            }
-                                                            });
-                                                            }
-                                                            %>
-
-                                                            <div class="mt-3">
-                                                                <% if (!isRegistered) { %>
-                                                                    <button type="button"
-                                                                        class="btn btn-sm btn-secondary" disabled>
-                                                                        <i class="fas fa-plus-circle mr-1"></i> Đăng ký
-                                                                        học phần
+                                                        <div class="mt-3">
+                                                            <% if (course.trangthaidangky==='chưa đăng ký' ) { %>
+                                                                <form action="/sinhvien/xacnhandangky" method="POST">
+                                                                    <input type="hidden" name="mahocphan"
+                                                                        value="<%= course.mahocphan %>">
+                                                                    <button type="submit"
+                                                                        class="btn btn-sm btn-warning">
+                                                                        <i class="fas fa-check-circle mr-1"></i> Xác
+                                                                        nhận đăng ký
                                                                     </button>
-                                                                    <span class="text-muted d-block mt-1 small">
-                                                                        <i class="fas fa-info-circle mr-1"></i>
-                                                                        Vui lòng liên hệ quản trị viên để đăng ký học
-                                                                        phần này.
+                                                                </form>
+                                                                <% } else if (course.trangthaidangky==='đã đăng ký' ) {
+                                                                    %>
+                                                                    <span class="status-badge badge-approved">
+                                                                        <i class="fas fa-check-circle mr-1"></i> Đã đăng
+                                                                        ký
                                                                     </span>
+                                                                    <div class="mt-2">
+                                                                        <span class="text-muted small">
+                                                                            <i class="fas fa-info-circle mr-1"></i>
+                                                                            Vui lòng liên hệ quản trị viên nếu bạn muốn
+                                                                            hủy đăng ký học phần này.
+                                                                        </span>
+                                                                    </div>
                                                                     <% } else { %>
-                                                                        <% if (status==='đã hủy' ) { %>
-                                                                            <span class="badge badge-secondary">
-                                                                                <i class="fas fa-ban mr-1"></i> Đã hủy
-                                                                            </span>
-                                                                            <span class="text-muted d-block mt-1 small">
+                                                                        <span class="badge badge-secondary">
+                                                                            <i class="fas fa-ban mr-1"></i> Đã hủy
+                                                                        </span>
+                                                                        <div class="mt-2">
+                                                                            <span class="text-muted small">
                                                                                 <i class="fas fa-info-circle mr-1"></i>
                                                                                 Vui lòng liên hệ quản trị viên để đăng
-                                                                                ký lại.
+                                                                                ký lại học phần này.
                                                                             </span>
-                                                                            <% } else if (status==='chưa đăng ký' ) { %>
-                                                                                <form action="/sinhvien/xacnhandangky"
-                                                                                    method="POST">
-                                                                                    <input type="hidden"
-                                                                                        name="mahocphan"
-                                                                                        value="<%= course.mahocphan %>">
-                                                                                    <button type="submit"
-                                                                                        class="btn btn-sm btn-warning">
-                                                                                        <i
-                                                                                            class="fas fa-check-circle mr-1"></i>
-                                                                                        Xác nhận đăng ký
-                                                                                    </button>
-                                                                                    <span
-                                                                                        class="ml-2 status-badge badge-pending">Chờ
-                                                                                        xác nhận</span>
-                                                                                </form>
-                                                                                <% } else { %>
-                                                                                    <span
-                                                                                        class="status-badge badge-approved">
-                                                                                        <i
-                                                                                            class="fas fa-check-circle mr-1"></i>
-                                                                                        Đã đăng ký
-                                                                                    </span>
-                                                                                    <% } %>
-                                                                                        <% } %>
-                                                            </div>
+                                                                        </div>
+                                                                        <% } %>
+                                                        </div>
                                                     </div>
                                                     <% }); %>
                                             </div>
                                             <% } else { %>
                                                 <div class="no-data">
                                                     <i class="fas fa-book"></i>
-                                                    <p>Không có học phần nào khả dụng</p>
+                                                    <p>Bạn chưa được thêm vào học phần nào. Vui lòng liên hệ với quản
+                                                        trị viên để đăng ký học phần.</p>
                                                 </div>
                                                 <% } %>
                                     </div>

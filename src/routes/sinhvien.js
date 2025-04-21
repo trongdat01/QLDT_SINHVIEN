@@ -435,12 +435,17 @@ router.get('/dangkyhocphan', requireStudentLogin, async (req, res) => {
     try {
         const msv = req.session.user.id;
 
-        // Get all available courses
+        // Get student's registered courses instead of all courses
         let courses = [];
         try {
             courses = await sequelize.query(
-                `SELECT * FROM dangkyhocphan ORDER BY tenhocphan`,
+                `SELECT d.*, c.tenhocphan, c.sotinchi, c.loaihocphan, c.khoa, c.hocki 
+                 FROM dsdangkyhocphan d
+                 JOIN dangkyhocphan c ON d.mahocphan = c.mahocphan
+                 WHERE d.msv = ?
+                 ORDER BY c.tenhocphan`,
                 {
+                    replacements: [msv],
                     type: sequelize.QueryTypes.SELECT
                 }
             );
@@ -449,7 +454,7 @@ router.get('/dangkyhocphan', requireStudentLogin, async (req, res) => {
             // Continue with empty array
         }
 
-        // Get student's registered courses
+        // Get student's registration records (we need both for the UI logic)
         let registrations = [];
         try {
             registrations = await sequelize.query(
@@ -457,7 +462,7 @@ router.get('/dangkyhocphan', requireStudentLogin, async (req, res) => {
                  FROM dsdangkyhocphan d
                  JOIN dangkyhocphan c ON d.mahocphan = c.mahocphan
                  WHERE d.msv = ?
-                 ORDER BY d.created_at DESC`,
+                 ORDER BY d.id DESC`,
                 {
                     replacements: [msv],
                     type: sequelize.QueryTypes.SELECT
