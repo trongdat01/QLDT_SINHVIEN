@@ -220,64 +220,74 @@ router.get('/dashboard', requireStudentLogin, async (req, res) => {
 router.get('/lichhoc', requireStudentLogin, async (req, res) => {
     try {
         const msv = req.session.user.id;
+        let registeredCourses = [];
+        let schedules = [];
+        let schedulesByDay = {};
 
         // Get student's registered courses with 'đã đăng ký' status
-        const registeredCourses = await sequelize.query(
-            `SELECT d.mahocphan, c.tenhocphan 
-             FROM dsdangkyhocphan d
-             JOIN dangkyhocphan c ON d.mahocphan = c.mahocphan
-             WHERE d.msv = ? AND d.trangthaidangky = 'đã đăng ký'`,
-            {
-                replacements: [msv],
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
-
-        if (!registeredCourses || registeredCourses.length === 0) {
-            return res.render('sinhvien/lichhoc', {
-                title: 'Lịch Học Của Tôi',
-                user: req.session.user,
-                schedules: [],
-                message: 'Bạn chưa đăng ký học phần nào hoặc các học phần đăng ký chưa được phê duyệt.'
-            });
+        try {
+            registeredCourses = await sequelize.query(
+                `SELECT d.mahocphan, c.tenhocphan 
+                 FROM dsdangkyhocphan d
+                 JOIN dangkyhocphan c ON d.mahocphan = c.mahocphan
+                 WHERE d.msv = ? AND d.trangthaidangky = 'đã đăng ký'`,
+                {
+                    replacements: [msv],
+                    type: sequelize.QueryTypes.SELECT
+                }
+            );
+        } catch (error) {
+            console.error("Error fetching registered courses:", error);
+            // Continue with empty array
         }
 
-        // Get the list of course IDs
-        const courseIds = registeredCourses.map(course => course.mahocphan);
+        if (registeredCourses && registeredCourses.length > 0) {
+            // Get the list of course IDs
+            const courseIds = registeredCourses.map(course => course.mahocphan);
 
-        // Get schedules for these courses
-        const schedules = await sequelize.query(
-            `SELECT l.*, c.tenhocphan 
-             FROM lichhoc l
-             JOIN dangkyhocphan c ON l.mahocphan = c.mahocphan
-             WHERE l.mahocphan IN (?)
-             ORDER BY l.ngaybatdau ASC, l.thu_lythuyet ASC`,
-            {
-                replacements: [courseIds],
-                type: sequelize.QueryTypes.SELECT
+            // Get schedules for these courses
+            try {
+                schedules = await sequelize.query(
+                    `SELECT l.*, c.tenhocphan 
+                     FROM lichhoc l
+                     JOIN dangkyhocphan c ON l.mahocphan = c.mahocphan
+                     WHERE l.mahocphan IN (?)
+                     ORDER BY l.ngaybatdau ASC, l.thu_lythuyet ASC`,
+                    {
+                        replacements: [courseIds],
+                        type: sequelize.QueryTypes.SELECT
+                    }
+                );
+
+                // Group schedules by day for easier display
+                schedulesByDay = {};
+                const weekdays = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+
+                schedules.forEach(schedule => {
+                    const dayOfWeek = schedule.thu_lythuyet;
+
+                    if (!schedulesByDay[dayOfWeek]) {
+                        schedulesByDay[dayOfWeek] = [];
+                    }
+                    schedulesByDay[dayOfWeek].push(schedule);
+                });
+            } catch (error) {
+                console.error("Error fetching schedules:", error);
+                // Continue with empty arrays
             }
-        );
+        }
 
-        // Group schedules by day for easier display
-        const schedulesByDay = {};
-        const weekdays = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
-
-        schedules.forEach(schedule => {
-            const dayOfWeek = schedule.thu_lythuyet;
-
-            if (!schedulesByDay[dayOfWeek]) {
-                schedulesByDay[dayOfWeek] = [];
-            }
-            schedulesByDay[dayOfWeek].push(schedule);
-        });
+        const message = (!registeredCourses || registeredCourses.length === 0) ?
+            'Bạn chưa đăng ký học phần nào hoặc các học phần đăng ký chưa được phê duyệt.' : '';
 
         res.render('sinhvien/lichhoc', {
             title: 'Lịch Học Của Tôi',
             user: req.session.user,
             schedules: schedules || [],
-            schedulesByDay,
-            weekdays,
-            courses: registeredCourses || []
+            schedulesByDay: schedulesByDay || {},
+            weekdays: ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
+            courses: registeredCourses || [],
+            message: message
         });
     } catch (error) {
         console.error('Lỗi tải lịch học sinh viên:', error);
@@ -426,36 +436,48 @@ router.get('/dangkyhocphan', requireStudentLogin, async (req, res) => {
         const msv = req.session.user.id;
 
         // Get all available courses
-        const courses = await sequelize.query(
-            `SELECT * FROM dangkyhocphan ORDER BY tenhocphan`,
-            {
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
+        let courses = [];
+        try {
+            courses = await sequelize.query(
+                `SELECT * FROM dangkyhocphan ORDER BY tenhocphan`,
+                {
+                    type: sequelize.QueryTypes.SELECT
+                }
+            );
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+            // Continue with empty array
+        }
 
         // Get student's registered courses
-        const registrations = await sequelize.query(
-            `SELECT d.*, c.tenhocphan, c.sotinchi, c.loaihocphan 
-             FROM dsdangkyhocphan d
-             JOIN dangkyhocphan c ON d.mahocphan = c.mahocphan
-             WHERE d.msv = ?
-             ORDER BY d.ngaydangky DESC`,
-            {
-                replacements: [msv],
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
+        let registrations = [];
+        try {
+            registrations = await sequelize.query(
+                `SELECT d.*, c.tenhocphan, c.sotinchi, c.loaihocphan 
+                 FROM dsdangkyhocphan d
+                 JOIN dangkyhocphan c ON d.mahocphan = c.mahocphan
+                 WHERE d.msv = ?
+                 ORDER BY d.created_at DESC`,
+                {
+                    replacements: [msv],
+                    type: sequelize.QueryTypes.SELECT
+                }
+            );
+        } catch (error) {
+            console.error('Error fetching registrations:', error);
+            // Continue with empty array
+        }
 
         res.render('sinhvien/dangkyhocphan', {
             title: 'Đăng Ký Học Phần',
             user: req.session.user,
-            courses: courses || [],
-            registrations: registrations || [],
+            courses: courses,
+            registrations: registrations,
             error: req.query.error,
             success: req.query.success
         });
     } catch (error) {
-        console.error('Lỗi tải trang đăng ký học phần:', error);
+        console.error('Error loading registration page:', error);
         res.status(500).render('error', {
             message: 'Đã xảy ra lỗi khi tải trang đăng ký học phần',
             error
@@ -463,8 +485,18 @@ router.get('/dangkyhocphan', requireStudentLogin, async (req, res) => {
     }
 });
 
-// Process course registration
+// Process course registration - RESTRICTED: Students can only view, not add registrations
 router.post('/dangkyhocphan', requireStudentLogin, async (req, res) => {
+    try {
+        return res.redirect('/sinhvien/dangkyhocphan?error=Không có quyền đăng ký học phần. Vui lòng liên hệ quản trị viên để được hỗ trợ.');
+    } catch (error) {
+        console.error('Error registering for course:', error);
+        res.redirect('/sinhvien/dangkyhocphan?error=Đã xảy ra lỗi khi đăng ký học phần: ' + error.message);
+    }
+});
+
+// Confirm course registration - Students CAN update status from "chưa đăng ký" to "đã đăng ký"
+router.post('/xacnhandangky', requireStudentLogin, async (req, res) => {
     try {
         const { mahocphan } = req.body;
         const msv = req.session.user.id;
@@ -474,67 +506,44 @@ router.post('/dangkyhocphan', requireStudentLogin, async (req, res) => {
             return res.redirect('/sinhvien/dangkyhocphan?error=Vui lòng chọn học phần');
         }
 
-        // Check if the student has already registered for this course
-        const existingRegistration = await sequelize.query(
-            `SELECT * FROM dsdangkyhocphan WHERE msv = ? AND mahocphan = ?`,
+        // Check if the registration exists and is in "chưa đăng ký" status
+        const registrations = await sequelize.query(
+            `SELECT * FROM dsdangkyhocphan 
+             WHERE msv = ? AND mahocphan = ? AND trangthaidangky = 'chưa đăng ký'`,
             {
                 replacements: [msv, mahocphan],
                 type: sequelize.QueryTypes.SELECT
             }
         );
 
-        if (existingRegistration && existingRegistration.length > 0) {
-            return res.redirect('/sinhvien/dangkyhocphan?error=Bạn đã đăng ký học phần này rồi');
+        if (!registrations || registrations.length === 0) {
+            return res.redirect('/sinhvien/dangkyhocphan?error=Không tìm thấy đăng ký hoặc học phần đã được xác nhận');
         }
 
-        // Insert new registration with "chưa đăng ký" status (admin will need to approve)
+        // Update registration status to "đã đăng ký"
         await sequelize.query(
-            `INSERT INTO dsdangkyhocphan (msv, mahocphan, trangthaidangky) 
-             VALUES (?, ?, 'chưa đăng ký')`,
+            `UPDATE dsdangkyhocphan 
+             SET trangthaidangky = 'đã đăng ký' 
+             WHERE msv = ? AND mahocphan = ? AND trangthaidangky = 'chưa đăng ký'`,
             {
                 replacements: [msv, mahocphan],
-                type: sequelize.QueryTypes.INSERT
-            }
-        );
-
-        res.redirect('/sinhvien/dangkyhocphan?success=Đăng ký học phần thành công. Chờ quản trị viên phê duyệt.');
-    } catch (error) {
-        console.error('Lỗi đăng ký học phần:', error);
-        res.redirect('/sinhvien/dangkyhocphan?error=Đã xảy ra lỗi khi đăng ký học phần: ' + error.message);
-    }
-});
-
-// Cancel course registration
-router.post('/huydangkyhocphan', requireStudentLogin, async (req, res) => {
-    try {
-        const { registrationId } = req.body;
-        const msv = req.session.user.id;
-
-        // Verify the registration belongs to this student
-        const registration = await sequelize.query(
-            `SELECT * FROM dsdangkyhocphan WHERE id = ? AND msv = ?`,
-            {
-                replacements: [registrationId, msv],
-                type: sequelize.QueryTypes.SELECT
-            }
-        );
-
-        if (!registration || registration.length === 0) {
-            return res.redirect('/sinhvien/dangkyhocphan?error=Không tìm thấy đăng ký học phần này');
-        }
-
-        // Update registration status to "đã hủy"
-        await sequelize.query(
-            `UPDATE dsdangkyhocphan SET trangthaidangky = 'đã hủy' WHERE id = ?`,
-            {
-                replacements: [registrationId],
                 type: sequelize.QueryTypes.UPDATE
             }
         );
 
-        res.redirect('/sinhvien/dangkyhocphan?success=Hủy đăng ký học phần thành công');
+        res.redirect('/sinhvien/dangkyhocphan?success=Đăng ký học phần thành công');
     } catch (error) {
-        console.error('Lỗi hủy đăng ký học phần:', error);
+        console.error('Error confirming registration:', error);
+        res.redirect('/sinhvien/dangkyhocphan?error=Đã xảy ra lỗi khi xác nhận đăng ký học phần: ' + error.message);
+    }
+});
+
+// Cancel course registration - RESTRICTED: Students cannot cancel registrations
+router.post('/huydangkyhocphan', requireStudentLogin, async (req, res) => {
+    try {
+        return res.redirect('/sinhvien/dangkyhocphan?error=Không có quyền hủy đăng ký học phần. Vui lòng liên hệ quản trị viên để được hỗ trợ.');
+    } catch (error) {
+        console.error('Error canceling registration:', error);
         res.redirect('/sinhvien/dangkyhocphan?error=Đã xảy ra lỗi khi hủy đăng ký học phần: ' + error.message);
     }
 });

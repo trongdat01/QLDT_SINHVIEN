@@ -9,135 +9,264 @@
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #f8f9fa;
             padding-top: 56px;
+            font-family: 'Roboto', sans-serif;
+            color: #343a40;
+            line-height: 1.6;
         }
 
         .navbar-brand {
-            font-weight: bold;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, #1a237e, #283593);
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ffffff;
+        }
+
+        .navbar-dark .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: white;
+            transition: width 0.3s ease;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover::after {
+            width: 100%;
         }
 
         .dashboard-header {
-            background: linear-gradient(135deg, #0d6efd, #0a58ca);
+            background: linear-gradient(120deg, #304ffe, #1a237e);
             color: white;
-            padding: 2rem 0;
+            padding: 2.5rem 0;
             margin-bottom: 2rem;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255, 255, 255, 0.05)" fill-opacity="1" d="M0,224L34.3,213.3C68.6,203,137,181,206,181.3C274.3,181,343,203,411,218.7C480,235,549,245,617,229.3C685.7,213,754,171,823,149.3C891.4,128,960,128,1029,149.3C1097.1,171,1166,213,1234,224C1302.9,235,1371,213,1406,202.7L1440,192L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z"></path></svg>');
+            background-position: bottom;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .dashboard-header .container {
+            position: relative;
+            z-index: 1;
         }
 
         .welcome-text {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 300;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            margin-bottom: 0.5rem;
         }
 
         .student-info {
             font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .student-info:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .student-info strong {
+            color: #1a237e;
         }
 
         .dashboard-card {
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            border-radius: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
             border: none;
             height: 100%;
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            background-color: #ffffff;
         }
 
         .dashboard-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-7px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
 
         .card-header {
             font-weight: 600;
-            background: #f1f5f9;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
             border-bottom: 2px solid #e5e7eb;
+            padding: 1rem 1.25rem;
         }
 
         .card-icon {
-            background: #e6f1ff;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
             width: 50px;
             height: 50px;
-            border-radius: 25px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 15px;
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.2);
         }
 
         .card-icon i {
             font-size: 1.5rem;
-            color: #0d6efd;
+            color: #1a237e;
         }
 
         .menu-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 10px;
-            background: #e6f1ff;
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+            box-shadow: 0 4px 10px rgba(26, 35, 126, 0.2);
+            transition: all 0.3s ease;
+            margin: 0 auto 10px auto;
         }
 
         .menu-icon i {
-            color: #0d6efd;
+            color: #1a237e;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
         }
 
         .quick-menu {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         }
 
         .quick-link {
             text-align: center;
             margin-bottom: 1rem;
-            transition: transform 0.2s;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
         }
 
         .quick-link:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
+            background-color: rgba(224, 227, 240, 0.4);
+        }
+
+        .quick-link:hover .menu-icon {
+            background: linear-gradient(135deg, #304ffe, #1a237e);
+        }
+
+        .quick-link:hover .menu-icon i {
+            color: white;
         }
 
         .quick-link a {
             color: #495057;
             text-decoration: none;
+            font-weight: 500;
+            display: block;
+        }
+
+        .quick-link span {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.9rem;
         }
 
         .exam-item,
         .class-item,
         .news-item {
-            border-left: 3px solid #0d6efd;
-            padding-left: 15px;
+            border-left: 3px solid #3949ab;
+            padding: 15px;
             margin-bottom: 15px;
             position: relative;
+            background-color: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+
+        .exam-item:hover,
+        .class-item:hover,
+        .news-item:hover {
+            transform: translateX(5px);
+            background-color: #f1f3f9;
         }
 
         .exam-item.urgent {
-            border-left-color: #dc3545;
+            border-left-color: #f44336;
+        }
+
+        .exam-item h6,
+        .class-item h6,
+        .news-item h6 {
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 5px;
         }
 
         .today-marker {
-            background-color: #dc3545;
+            background-color: #f44336;
             color: white;
             padding: 3px 10px;
-            border-radius: 10px;
+            border-radius: 20px;
             font-size: 0.7rem;
             position: absolute;
-            right: 0;
-            top: 0;
+            right: 10px;
+            top: 10px;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(244, 67, 54, 0.3);
         }
 
         .tomorrow-marker {
-            background-color: #fd7e14;
+            background-color: #ff9800;
             color: white;
             padding: 3px 10px;
-            border-radius: 10px;
+            border-radius: 20px;
             font-size: 0.7rem;
             position: absolute;
-            right: 0;
-            top: 0;
+            right: 10px;
+            top: 10px;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(255, 152, 0, 0.3);
         }
 
         .financial-status {
@@ -145,30 +274,126 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 15px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
         }
 
         .progress {
             height: 10px;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge {
+            padding: 7px 10px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-outline-primary {
+            border-color: #3949ab;
+            color: #3949ab;
+            border-radius: 20px;
+            padding: 5px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #3949ab;
+            border-color: #3949ab;
+            box-shadow: 0 3px 10px rgba(57, 73, 171, 0.3);
         }
 
         footer {
-            background-color: #343a40;
+            background: linear-gradient(to right, #1a237e, #283593);
             color: white;
-            padding: 1.5rem 0;
+            padding: 2rem 0;
             margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255, 255, 255, 0.05)" fill-opacity="1" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,245,1152,218.7C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.1;
+        }
+
+        footer h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        footer h5::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background-color: rgba(255, 255, 255, 0.5);
+            bottom: -8px;
+            left: 0;
         }
 
         .img-fluid {
             max-height: 40px;
         }
 
+        .empty-state {
+            padding: 20px;
+            text-align: center;
+            color: #757575;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #bbdefb;
+        }
+
         @media (max-width: 768px) {
             .dashboard-card {
-                margin-bottom: 1rem;
+                margin-bottom: 1.5rem;
             }
 
             .student-info {
                 font-size: 0.9rem;
+                margin-top: 1.5rem;
+            }
+
+            .welcome-text {
+                font-size: 1.3rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .quick-menu {
+                padding: 1rem 0.5rem;
+            }
+
+            .menu-icon {
+                width: 40px;
+                height: 40px;
             }
         }
     </style>
@@ -176,7 +401,7 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/sinhvien/dashboard">
                 <img src="/images/logo.png" alt="Logo" class="img-fluid mr-2">
@@ -189,21 +414,32 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/sinhvien/dashboard">Trang chủ</a>
+                        <a class="nav-link" href="/sinhvien/dashboard">
+                            <i class="fas fa-home mr-1"></i> Trang chủ
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/sinhvien/thongtin">Thông tin cá nhân</a>
+                        <a class="nav-link" href="/sinhvien/thongtin">
+                            <i class="fas fa-user mr-1"></i> Thông tin cá nhân
+                        </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle mr-1"></i>
                             <%= user.hovaten %>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/sinhvien/thongtin">Thông tin cá nhân</a>
-                            <a class="dropdown-item" href="/sinhvien/doimatkhau">Đổi mật khẩu</a>
+                            <a class="dropdown-item" href="/sinhvien/thongtin">
+                                <i class="fas fa-id-card mr-2"></i> Thông tin cá nhân
+                            </a>
+                            <a class="dropdown-item" href="/sinhvien/doimatkhau">
+                                <i class="fas fa-key mr-2"></i> Đổi mật khẩu
+                            </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/taikhoan/dang-xuat">Đăng xuất</a>
+                            <a class="dropdown-item" href="/taikhoan/dang-xuat">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
+                            </a>
                         </div>
                     </li>
                 </ul>
@@ -220,15 +456,15 @@
                     <p class="welcome-text">Chào mừng bạn đến với cổng thông tin sinh viên</p>
                 </div>
                 <div class="col-md-4">
-                    <div class="card bg-light">
-                        <div class="card-body student-info">
-                            <p class="mb-1"><strong>MSSV:</strong>
+                    <div class="card student-info">
+                        <div class="card-body">
+                            <p class="mb-1"><strong><i class="fas fa-id-badge mr-2"></i>MSSV:</strong>
                                 <%= user.id %>
                             </p>
-                            <p class="mb-1"><strong>Khoa:</strong>
+                            <p class="mb-1"><strong><i class="fas fa-graduation-cap mr-2"></i>Khoa:</strong>
                                 <%= user.khoa %>
                             </p>
-                            <p class="mb-0"><strong>Niên khóa:</strong>
+                            <p class="mb-0"><strong><i class="fas fa-calendar-alt mr-2"></i>Niên khóa:</strong>
                                 <%= user.nienkhoa %>
                             </p>
                         </div>
@@ -243,60 +479,60 @@
         <!-- Quick Menu -->
         <section class="quick-menu">
             <div class="row">
-                <div class="col-3 col-md-2">
+                <div class="col-4 col-md-2">
                     <div class="quick-link">
                         <a href="/sinhvien/lichhoc">
-                            <div class="menu-icon mx-auto">
+                            <div class="menu-icon">
                                 <i class="fas fa-calendar-alt"></i>
                             </div>
                             <span>Lịch học</span>
                         </a>
                     </div>
                 </div>
-                <div class="col-3 col-md-2">
+                <div class="col-4 col-md-2">
                     <div class="quick-link">
                         <a href="/sinhvien/lichthi">
-                            <div class="menu-icon mx-auto">
+                            <div class="menu-icon">
                                 <i class="fas fa-tasks"></i>
                             </div>
                             <span>Lịch thi</span>
                         </a>
                     </div>
                 </div>
-                <div class="col-3 col-md-2">
+                <div class="col-4 col-md-2">
                     <div class="quick-link">
                         <a href="/sinhvien/diem">
-                            <div class="menu-icon mx-auto">
+                            <div class="menu-icon">
                                 <i class="fas fa-chart-line"></i>
                             </div>
                             <span>Điểm số</span>
                         </a>
                     </div>
                 </div>
-                <div class="col-3 col-md-2">
+                <div class="col-4 col-md-2">
                     <div class="quick-link">
                         <a href="/sinhvien/dangkyhocphan">
-                            <div class="menu-icon mx-auto">
+                            <div class="menu-icon">
                                 <i class="fas fa-book"></i>
                             </div>
                             <span>Đăng ký học</span>
                         </a>
                     </div>
                 </div>
-                <div class="col-3 col-md-2">
+                <div class="col-4 col-md-2">
                     <div class="quick-link">
                         <a href="/sinhvien/taichinh">
-                            <div class="menu-icon mx-auto">
+                            <div class="menu-icon">
                                 <i class="fas fa-money-bill-wave"></i>
                             </div>
                             <span>Tài chính</span>
                         </a>
                     </div>
                 </div>
-                <div class="col-3 col-md-2">
+                <div class="col-4 col-md-2">
                     <div class="quick-link">
                         <a href="/sinhvien/thongtin">
-                            <div class="menu-icon mx-auto">
+                            <div class="menu-icon">
                                 <i class="fas fa-user"></i>
                             </div>
                             <span>Thông tin</span>
@@ -339,12 +575,15 @@
                                 </div>
                                 <% }); %>
                                     <% } else { %>
-                                        <p class="text-center text-muted">Không có lịch học trong hôm nay và ngày mai.
-                                        </p>
+                                        <div class="empty-state">
+                                            <i class="far fa-calendar-times"></i>
+                                            <p>Không có lịch học trong hôm nay và ngày mai.</p>
+                                        </div>
                                         <% } %>
                                             <div class="text-center mt-3">
-                                                <a href="/sinhvien/lichhoc" class="btn btn-outline-primary btn-sm">Xem
-                                                    tất cả lịch học</a>
+                                                <a href="/sinhvien/lichhoc" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-calendar mr-1"></i> Xem tất cả lịch học
+                                                </a>
                                             </div>
                     </div>
                 </div>
@@ -388,11 +627,15 @@
                                     </div>
                                     <% }); %>
                                         <% } else { %>
-                                            <p class="text-center text-muted">Không có lịch thi trong 7 ngày tới.</p>
+                                            <div class="empty-state">
+                                                <i class="far fa-calendar-times"></i>
+                                                <p>Không có lịch thi trong 7 ngày tới.</p>
+                                            </div>
                                             <% } %>
                                                 <div class="text-center mt-3">
-                                                    <a href="/sinhvien/lichthi"
-                                                        class="btn btn-outline-primary btn-sm">Xem tất cả lịch thi</a>
+                                                    <a href="/sinhvien/lichthi" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-clipboard-list mr-1"></i> Xem tất cả lịch thi
+                                                    </a>
                                                 </div>
                     </div>
                 </div>
@@ -411,14 +654,14 @@
                         <% if(financialStatus) { %>
                             <div class="financial-status">
                                 <div>
-                                    <h6>Tổng học phí:</h6>
-                                    <p>
+                                    <h6 class="mb-1">Tổng học phí:</h6>
+                                    <p class="mb-0 font-weight-bold">
                                         <%= Number(financialStatus.khoanphainop).toLocaleString('vi-VN') %> VNĐ
                                     </p>
                                 </div>
                                 <div class="text-right">
-                                    <h6>Đã thanh toán:</h6>
-                                    <p>
+                                    <h6 class="mb-1">Đã thanh toán:</h6>
+                                    <p class="mb-0 font-weight-bold">
                                         <%= Number(financialStatus.khoandanop).toLocaleString('vi-VN') %> VNĐ
                                     </p>
                                 </div>
@@ -427,8 +670,10 @@
                             <% const totalAmount=parseFloat(financialStatus.khoanphainop); const
                                 paidAmount=parseFloat(financialStatus.khoandanop) +
                                 parseFloat(financialStatus.khoandocmien); const progress=Math.min(100, (paidAmount /
-                                totalAmount) * 100); let progressClass='bg-danger' ; if (progress>= 100) {
+                                totalAmount) * 100); let progressClass='bg-danger' ; let statusClass='badge-warning' ;
+                                if (progress>= 100) {
                                 progressClass = 'bg-success';
+                                statusClass = 'badge-success';
                                 } else if (progress > 50) {
                                 progressClass = 'bg-warning';
                                 }
@@ -442,20 +687,28 @@
 
                                 <p class="text-center">
                                     <% if (financialStatus.trangthai==='đã hoàn thành' ) { %>
-                                        <span class="badge badge-success">Đã hoàn thành</span>
+                                        <span class="badge badge-success">
+                                            <i class="fas fa-check-circle mr-1"></i> Đã hoàn thành
+                                        </span>
                                         <% } else { %>
-                                            <span class="badge badge-warning">Chưa hoàn thành</span>
-                                            <span class="ml-2">Còn lại: <%=
+                                            <span class="badge <%= statusClass %>">
+                                                <i class="fas fa-exclamation-circle mr-1"></i> Chưa hoàn thành
+                                            </span>
+                                            <span class="ml-2 font-weight-bold">Còn lại: <%=
                                                     Number(financialStatus.conlai).toLocaleString('vi-VN') %> VNĐ</span>
                                             <% } %>
                                 </p>
 
                                 <div class="text-center mt-3">
-                                    <a href="/sinhvien/taichinh" class="btn btn-outline-primary btn-sm">Xem chi tiết tài
-                                        chính</a>
+                                    <a href="/sinhvien/taichinh" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-wallet mr-1"></i> Xem chi tiết tài chính
+                                    </a>
                                 </div>
                                 <% } else { %>
-                                    <p class="text-center text-muted">Chưa có thông tin tài chính.</p>
+                                    <div class="empty-state">
+                                        <i class="fas fa-wallet"></i>
+                                        <p>Chưa có thông tin tài chính.</p>
+                                    </div>
                                     <% } %>
                     </div>
                 </div>
@@ -482,19 +735,25 @@
                                             <%= news.danhmuc %>
                                         </span>
                                         <small class="text-muted">
+                                            <i class="far fa-calendar-alt mr-1"></i>
                                             <%= new Date(news.ngaydang).toLocaleDateString('vi-VN') %>
                                         </small>
                                     </p>
-                                    <a href="<%= news.linkbaidang %>" target="_blank"
-                                        class="btn btn-link btn-sm p-0">Xem chi tiết</a>
+                                    <a href="<%= news.linkbaidang %>" target="_blank" class="btn btn-link btn-sm p-0">
+                                        <i class="fas fa-external-link-alt mr-1"></i> Xem chi tiết
+                                    </a>
                                 </div>
                                 <% }); %>
                                     <% } else { %>
-                                        <p class="text-center text-muted">Không có tin tức mới.</p>
+                                        <div class="empty-state">
+                                            <i class="far fa-newspaper"></i>
+                                            <p>Không có tin tức mới.</p>
+                                        </div>
                                         <% } %>
                                             <div class="text-center mt-3">
-                                                <a href="/sinhvien/tintuc" class="btn btn-outline-primary btn-sm">Xem
-                                                    tất cả tin tức</a>
+                                                <a href="/sinhvien/tintuc" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-list-alt mr-1"></i> Xem tất cả tin tức
+                                                </a>
                                             </div>
                     </div>
                 </div>
@@ -512,8 +771,8 @@
                 </div>
                 <div class="col-md-6 text-md-right">
                     <h5>Liên hệ</h5>
-                    <p class="mb-0">Email: support@example.edu.vn</p>
-                    <p class="mb-0">Hotline: 1900 xxxx</p>
+                    <p class="mb-0"><i class="far fa-envelope mr-2"></i>Email: support@example.edu.vn</p>
+                    <p class="mb-0"><i class="fas fa-phone-alt mr-2"></i>Hotline: 1900 xxxx</p>
                 </div>
             </div>
         </div>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 56px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, #1a237e, #283593);
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ffffff;
+        }
+
+        .page-header {
+            background: linear-gradient(120deg, #304ffe, #1a237e);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .profile-header {
+            background: linear-gradient(to right, #f5f7ff, #e8eaf6);
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .profile-header h4 {
+            margin: 0;
+            color: #3949ab;
+            font-weight: 600;
+        }
+
+        .profile-body {
+            padding: 20px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .info-group {
+            margin-bottom: 20px;
+        }
+
+        .info-group h5 {
+            color: #3949ab;
+            font-weight: 600;
+            border-bottom: 2px solid #e8eaf6;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .info-icon {
+            width: 36px;
+            height: 36px;
+            background-color: #e8eaf6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: #3949ab;
+        }
+
+        .info-label {
+            font-weight: 500;
+            width: 150px;
+            color: #616161;
+        }
+
+        .info-value {
+            flex: 1;
+            font-weight: 400;
+            color: #212121;
+        }
+
+        .btn-outline-primary {
+            color: #3949ab;
+            border-color: #3949ab;
+            border-radius: 20px;
+            padding: 5px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #3949ab;
+            border-color: #3949ab;
+            box-shadow: 0 3px 10px rgba(57, 73, 171, 0.3);
+        }
+
+        footer {
+            background: linear-gradient(to right, #1a237e, #283593);
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+
+        footer h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        footer h5::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background-color: rgba(255, 255, 255, 0.5);
+            margin-top: 8px;
+        }
+
+        .img-fluid {
+            max-height: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-image {
+                width: 120px;
+                height: 120px;
+            }
+
+            .info-label {
+                width: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/sinhvien/dashboard">
+                <img src="/images/logo.png" alt="Logo" class="img-fluid mr-2">
+                Cổng Thông Tin Sinh Viên
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sinhvien/dashboard">
+                            <i class="fas fa-home mr-1"></i> Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/sinhvien/thongtin">
+                            <i class="fas fa-user mr-1"></i> Thông tin cá nhân
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle mr-1"></i>
+                            <%= user.hovaten %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/sinhvien/thongtin">
+                                <i class="fas fa-id-card mr-2"></i> Thông tin cá nhân
+                            </a>
+                            <a class="dropdown-item" href="/sinhvien/doimatkhau">
+                                <i class="fas fa-key mr-2"></i> Đổi mật khẩu
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/taikhoan/dang-xuat">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="page-header">
+        <div class="container">
+            <h2><i class="fas fa-user-circle mr-2"></i> Thông Tin Cá Nhân</h2>
+            <p class="lead">Xem thông tin chi tiết của bạn</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Student Profile Card -->
+            <div class="col-md-4 mb-4">
+                <div class="profile-card text-center">
+                    <div class="profile-header">
+                        <h4>Thông Tin Sinh Viên</h4>
+                    </div>
+                    <div class="profile-body">
+                        <img src="<%= student.anhdaidien || '/images/default-avatar.png' %>" alt="Profile Image"
+                            class="profile-image">
+                        <h5 class="font-weight-bold mb-2">
+                            <%= student.hovaten %>
+                        </h5>
+                        <p class="text-muted mb-3">MSSV: <%= student.msv %>
+                        </p>
+                        <p class="mb-1">
+                            <span class="badge badge-primary">
+                                <%= student.khoa %>
+                            </span>
+                        </p>
+                        <p class="mb-3">
+                            <span class="badge badge-info">Niên khóa <%= student.nienkhoa %></span>
+                        </p>
+                        <a href="/sinhvien/dashboard" class="btn btn-outline-primary">
+                            <i class="fas fa-tachometer-alt mr-1"></i> Về Trang Chủ
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Information -->
+            <div class="col-md-8">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <h4>Thông Tin Chi Tiết</h4>
+                    </div>
+                    <div class="profile-body">
+                        <div class="info-group">
+                            <h5>Thông Tin Cá Nhân</h5>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="info-label">Họ và tên:</div>
+                                <div class="info-value">
+                                    <%= student.hovaten %>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div class="info-label">MSSV:</div>
+                                <div class="info-value">
+                                    <%= student.msv %>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-venus-mars"></i>
+                                </div>
+                                <div class="info-label">Giới tính:</div>
+                                <div class="info-value">
+                                    <%= student.gioitinh || 'Chưa cập nhật' %>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-birthday-cake"></i>
+                                </div>
+                                <div class="info-label">Ngày sinh:</div>
+                                <div class="info-value">
+                                    <%= student.ngaysinh ? new Date(student.ngaysinh).toLocaleDateString('vi-VN')
+                                        : 'Chưa cập nhật' %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-group">
+                            <h5>Thông Tin Học Tập</h5>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="info-label">Khoa/Ngành:</div>
+                                <div class="info-value">
+                                    <%= student.khoa %>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div class="info-label">Niên khóa:</div>
+                                <div class="info-value">
+                                    <%= student.nienkhoa %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-group">
+                            <h5>Thông Tin Liên Hệ</h5>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="info-label">Email:</div>
+                                <div class="info-value">
+                                    <%= student.email %>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div class="info-label">Số điện thoại:</div>
+                                <div class="info-value">
+                                    <%= student.sodienthoai || 'Chưa cập nhật' %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <% if(success) { %>
+                            <div class="alert alert-success mt-3">
+                                <%= success %>
+                            </div>
+                            <% } %>
+
+                                <% if(error) { %>
+                                    <div class="alert alert-danger mt-3">
+                                        <%= error %>
+                                    </div>
+                                    <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Cổng Thông Tin Sinh Viên</h5>
+                    <p class="mb-0">© <%= new Date().getFullYear() %> Bản quyền thuộc về Trường Đại học...</p>
+                </div>
+                <div class="col-md-6 text-md-right">
+                    <h5>Liên hệ</h5>
+                    <p class="mb-0"><i class="far fa-envelope mr-2"></i>Email: support@example.edu.vn</p>
+                    <p class="mb-0"><i class="fas fa-phone-alt mr-2"></i>Hotline: 1900 xxxx</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
