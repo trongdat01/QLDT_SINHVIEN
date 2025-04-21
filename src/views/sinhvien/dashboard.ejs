@@ -19,9 +19,22 @@
             font-weight: bold;
         }
 
+        .navbar {
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, #1a237e, #283593);
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ffffff;
+        }
+
         .dashboard-header {
             background: linear-gradient(135deg, #0d6efd, #0a58ca);
-            color: white;
+            color: rgb(255, 255, 255);
             padding: 2rem 0;
             margin-bottom: 2rem;
             border-radius: 0 0 10px 10px;
@@ -38,7 +51,7 @@
         }
 
         .dashboard-card {
-            box-shadow: 0 0.5rem 1rem rgba(24, 1, 101, 0.15);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             border-radius: 0.5rem;
             border: none;
             height: 100%;
@@ -176,10 +189,12 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/sinhvien/dashboard">
-                <img src="/images/logo.png" alt="Logo" class="img-fluid mr-2">
+                <img src="/images/logo.png" alt="Logo" class="img-fluid mr-2"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                <span style="display:none;">UTC</span>
                 Cổng Thông Tin Sinh Viên
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -189,14 +204,19 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/sinhvien/dashboard">Trang chủ</a>
+                        <a class="nav-link" href="/sinhvien/dashboard">
+                            <i class="fas fa-home mr-1"></i> Trang chủ
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/sinhvien/thongtin">Thông tin cá nhân</a>
+                        <a class="nav-link" href="/sinhvien/thongtin">
+                            <i class="fas fa-user mr-1"></i> Thông tin cá nhân
+                        </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle mr-1"></i>
                             <%= user.hovaten %>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -215,24 +235,13 @@
     <div class="dashboard-header">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <h1>Xin chào, <%= user.hovaten %>!</h1>
                     <p class="welcome-text">Chào mừng bạn đến với cổng thông tin sinh viên</p>
                 </div>
-                <div class="col-md-4">
-                    <div class="card bg-light">
-                        <div class="card-body student-info">
-                            <p class="mb-1"><strong>MSSV:</strong>
-                                <%= user.id %>
-                            </p>
-                            <p class="mb-1"><strong>Khoa:</strong>
-                                <%= user.khoa %>
-                            </p>
-                            <p class="mb-0"><strong>Niên khóa:</strong>
-                                <%= user.nienkhoa %>
-                            </p>
-                        </div>
-                    </div>
+                <div class="col-md-6">
+                    <img src="/images/university.jpg" alt="Trường đại học" class="img-fluid rounded shadow"
+                        style="max-height: 250px; width: 100%; object-fit: cover;">
                 </div>
             </div>
         </div>
