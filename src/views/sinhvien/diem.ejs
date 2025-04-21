@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 56px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, #1a237e, #283593);
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ffffff;
+        }
+
+        .page-header {
+            background: linear-gradient(120deg, #304ffe, #1a237e);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-card {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+            border: none;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: #e8eaf6;
+            color: #3f51b5;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(63, 81, 181, 0.2);
+        }
+
+        .table th {
+            background-color: #e8eaf6;
+            color: #3f51b5;
+            font-weight: 600;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .gpa-card {
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3f51b5, #7986cb);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .gpa-value {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 15px 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .gpa-credit {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .grades-summary {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .grades-summary div {
+            padding: 10px;
+        }
+
+        .semester-header {
+            background-color: #e8eaf6;
+            color: #3f51b5;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .badge-custom {
+            padding: 5px 10px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+
+        .badge-pass {
+            background-color: rgba(76, 175, 80, 0.15);
+            color: #4caf50;
+        }
+
+        .badge-fail {
+            background-color: rgba(244, 67, 54, 0.15);
+            color: #f44336;
+        }
+
+        footer {
+            background: linear-gradient(to right, #1a237e, #283593);
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+
+        footer h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .img-fluid {
+            max-height: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 1.5rem 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/sinhvien/dashboard">
+                <img src="/images/logo.png" alt="Logo" class="img-fluid mr-2">
+                Cổng Thông Tin Sinh Viên
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sinhvien/dashboard">
+                            <i class="fas fa-home mr-1"></i> Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sinhvien/dangkyhocphan">
+                            <i class="fas fa-book mr-1"></i> Đăng ký học phần
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sinhvien/lichhoc">
+                            <i class="fas fa-calendar-alt mr-1"></i> Lịch học
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sinhvien/lichthi">
+                            <i class="fas fa-pen-alt mr-1"></i> Lịch thi
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/sinhvien/diem">
+                            <i class="fas fa-chart-bar mr-1"></i> Điểm số
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle mr-1"></i>
+                            <%= user.hovaten %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/sinhvien/thongtin">
+                                <i class="fas fa-id-card mr-2"></i> Thông tin cá nhân
+                            </a>
+                            <a class="dropdown-item" href="/sinhvien/doimatkhau">
+                                <i class="fas fa-key mr-2"></i> Đổi mật khẩu
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/taikhoan/dang-xuat">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2><i class="fas fa-chart-bar mr-2"></i> Kết Quả Học Tập</h2>
+                    <p class="lead">Xem điểm số và kết quả học tập của bạn</p>
+                </div>
+                <div class="col-md-4 text-md-right">
+                    <button id="exportExcel" class="btn btn-light">
+                        <i class="fas fa-file-excel mr-1"></i> Xuất Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <% if (grades && grades.length> 0) { %>
+            <!-- GPA Summary -->
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="gpa-card">
+                        <h4 class="text-center mb-3">Điểm Trung Bình Tích Lũy</h4>
+                        <div class="gpa-value">
+                            <%= gpa %>
+                        </div>
+                        <div class="gpa-credit">
+                            <div>Tổng tín chỉ: <strong>
+                                    <%= totalCredits %>
+                                </strong></div>
+                            <div>Tín chỉ đạt: <strong>
+                                    <%= passedCredits %>
+                                </strong></div>
+                            <div>Tín chỉ chưa đạt: <strong>
+                                    <%= failedCredits %>
+                                </strong></div>
+                        </div>
+                        <div class="grades-summary">
+                            <div>
+                                <div class="h4">
+                                    <%= passedCredits %>
+                                </div>
+                                <div>Tín chỉ đạt</div>
+                            </div>
+                            <div>
+                                <div class="h4">
+                                    <%= failedCredits %>
+                                </div>
+                                <div>Tín chỉ học lại</div>
+                            </div>
+                            <div>
+                                <div class="h4">
+                                    <%= grades.length %>
+                                </div>
+                                <div>Học phần</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grades By Semester -->
+            <div class="card course-card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-list-alt mr-2"></i> Bảng điểm chi tiết</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="gradeContent">
+                        <% Object.keys(gradesBySemester).sort().reverse().forEach(function(semester) { %>
+                            <div class="semester-section">
+                                <h5 class="semester-header">
+                                    <i class="fas fa-calendar-alt mr-2"></i> Học kỳ: <%= semester %>
+                                </h5>
+
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Mã học phần</th>
+                                                <th>Tên học phần</th>
+                                                <th>Số tín chỉ</th>
+                                                <th>Điểm quá trình</th>
+                                                <th>Điểm thi</th>
+                                                <th>Điểm tổng kết</th>
+                                                <th>Kết quả</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% gradesBySemester[semester].forEach(function(grade, index) { %>
+                                                <tr>
+                                                    <td>
+                                                        <%= index + 1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%= grade.hocphan %>
+                                                    </td>
+                                                    <td>
+                                                        <%= grade.tenhocphan %>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <%= grade.sotinchi %>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <%= grade.diemquatrinh !==null ? grade.diemquatrinh.toFixed(1)
+                                                            : '-' %>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <%= grade.diemthi !==null ? grade.diemthi.toFixed(1) : '-' %>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <%= grade.diemtongket !==null ? grade.diemtongket.toFixed(1)
+                                                            : '-' %>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <% if(grade.trangthai==='đạt' ) { %>
+                                                            <span class="badge-custom badge-pass">Đạt</span>
+                                                            <% } else if(grade.trangthai==='học lại' ) { %>
+                                                                <span class="badge-custom badge-fail">Học lại</span>
+                                                                <% } else { %>
+                                                                    <span class="text-muted">-</span>
+                                                                    <% } %>
+                                                    </td>
+                                                </tr>
+                                                <% }); %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+            </div>
+            <% } else { %>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle mr-2"></i> Hiện chưa có dữ liệu điểm nào được ghi nhận.
+                </div>
+                <% } %>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Cổng Thông Tin Sinh Viên</h5>
+                    <p class="mb-0">© <%= new Date().getFullYear() %> Bản quyền thuộc về Trường Đại học...</p>
+                </div>
+                <div class="col-md-6 text-md-right">
+                    <h5>Liên hệ</h5>
+                    <p class="mb-0"><i class="far fa-envelope mr-2"></i>Email: support@example.edu.vn</p>
+                    <p class="mb-0"><i class="fas fa-phone-alt mr-2"></i>Hotline: 1900 xxxx</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+    <!-- XLSX Library for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Export to Excel functionality
+            $("#exportExcel").click(function () {
+                exportToExcel();
+            });
+
+            function exportToExcel() {
+                try {
+                    console.log("Starting Excel export...");
+                    // Create a workbook with a worksheet
+                    var wb = XLSX.utils.book_new();
+
+                    // Add student information
+                    var studentInfo = [
+                        ["BẢNG ĐIỂM SINH VIÊN"],
+                        [""],
+                        ["Họ và tên", "<%= user.hovaten %>"],
+                        ["MSSV", "<%= user.id %>"],
+                        ["Khoa", "<%= user.khoa %>"],
+                        ["Niên khóa", "<%= user.nienkhoa %>"],
+                        ["Điểm trung bình tích lũy", "<%= gpa %>"],
+                        ["Tổng số tín chỉ", "<%= totalCredits %>"],
+                        ["Tín chỉ đạt", "<%= passedCredits %>"],
+                        ["Tín chỉ học lại", "<%= failedCredits %>"],
+                        [""]
+                    ];
+
+                    var infoWS = XLSX.utils.aoa_to_sheet(studentInfo);
+                    XLSX.utils.book_append_sheet(wb, infoWS, "Thông tin");
+
+                    <% if (grades && grades.length > 0) { %>
+                        console.log("Processing <%= grades.length %> grades");
+
+                        // Create detailed grade sheet with all grades
+                        var detailedGradesData = [
+                            ["BẢNG ĐIỂM CHI TIẾT SINH VIÊN <%= user.hovaten %>"],
+                            ["MSSV: <%= user.id %>"],
+                            [""],
+                            ["STT", "Mã học phần", "Tên học phần", "Học kỳ", "Số tín chỉ", "Điểm quá trình", "Điểm thi", "Điểm tổng kết", "Kết quả"]
+                        ];
+                        
+                        <% grades.forEach(function (grade, index) { %>
+                            detailedGradesData.push([
+                                <%= index + 1 %>,
+                                "<%= grade.hocphan %>",
+                                "<%= grade.tenhocphan %>",
+                                "<%= grade.hocki %>",
+                                <%= grade.sotinchi %>,
+                                <%= grade.diemquatrinh !== null ? grade.diemquatrinh : "-" %>,
+                                <%= grade.diemthi !== null ? grade.diemthi : "-" %>,
+                                <%= grade.diemtongket !== null ? grade.diemtongket : "-" %>,
+                                "<%= grade.trangthai === 'đạt' ? 'Đạt' : (grade.trangthai === 'học lại' ? 'Học lại' : '-') %>"
+                            ]);
+                        <% }); %>
+                        
+                        var detailedGradesWS = XLSX.utils.aoa_to_sheet(detailedGradesData);
+                        XLSX.utils.book_append_sheet(wb, detailedGradesWS, "Bảng điểm chi tiết");
+                        console.log("Added detailed grades sheet");
+
+                        // Create sheets for each semester
+                        <% Object.keys(gradesBySemester).sort().reverse().forEach(function (semester) { %>
+                            var semesterGradesData = [
+                                ["BẢNG ĐIỂM HỌC KỲ <%= semester %>"],
+                                ["SINH VIÊN: <%= user.hovaten %> - MSSV: <%= user.id %>"],
+                                [""],
+                                ["STT", "Mã học phần", "Tên học phần", "Số tín chỉ", "Điểm quá trình", "Điểm thi", "Điểm tổng kết", "Kết quả"]
+                            ];
+                            
+                            <% gradesBySemester[semester].forEach(function (grade, index) { %>
+                                semesterGradesData.push([
+                                    <%= index + 1 %>,
+                                    "<%= grade.hocphan %>",
+                                    "<%= grade.tenhocphan %>",
+                                    <%= grade.sotinchi %>,
+                                    <%= grade.diemquatrinh !== null ? grade.diemquatrinh : "-" %>,
+                                    <%= grade.diemthi !== null ? grade.diemthi : "-" %>,
+                                    <%= grade.diemtongket !== null ? grade.diemtongket : "-" %>,
+                                    "<%= grade.trangthai === 'đạt' ? 'Đạt' : (grade.trangthai === 'học lại' ? 'Học lại' : '-') %>"
+                                ]);
+                            <% }); %>
+                            
+                            var semesterWS = XLSX.utils.aoa_to_sheet(semesterGradesData);
+                            XLSX.utils.book_append_sheet(wb, semesterWS, "HK <%= semester %>");
+                            console.log("Added semester <%= semester %> sheet");
+                        <% }); %>
+
+                        // Create semester summary
+                        var semesterSummaryData = [
+                            ["TÓM TẮT ĐIỂM TRUNG BÌNH THEO HỌC KỲ"],
+                            ["SINH VIÊN: <%= user.hovaten %> - MSSV: <%= user.id %>"],
+                            [""],
+                            ["Học kỳ", "Số học phần", "Tổng tín chỉ", "Tín chỉ đạt", "Tín chỉ học lại", "Điểm trung bình"]
+                        ];
+                        
+                        <% Object.keys(gradesBySemester).sort().reverse().forEach(function (semester) { %>
+                            <%
+                            let semTotalCredits = 0;
+                            let semPassedCredits = 0;
+                            let semFailedCredits = 0;
+                            let semTotalPoints = 0;
+
+                            gradesBySemester[semester].forEach(function (grade) {
+                                if (grade.sotinchi && !isNaN(parseFloat(grade.sotinchi))) {
+                                    const credits = parseFloat(grade.sotinchi);
+                                    semTotalCredits += credits;
+
+                                    if (grade.trangthai === 'đạt') {
+                                        semPassedCredits += credits;
+                                        if (grade.diemtongket !== null) {
+                                            semTotalPoints += grade.diemtongket * credits;
+                                        }
+                                    } else if (grade.trangthai === 'học lại') {
+                                        semFailedCredits += credits;
+                                    }
+                                }
+                            });
+
+                            const semGPA = semTotalCredits > 0 ? (semTotalPoints / semTotalCredits).toFixed(2) : '0.00';
+                            %>
+
+                                semesterSummaryData.push([
+                                    "<%= semester %>",
+                                <%= gradesBySemester[semester].length %>,
+                                <%= semTotalCredits %>,
+                                <%= semPassedCredits %>,
+                                <%= semFailedCredits %>,
+                                <%= semGPA %>
+                            ]);
+                        <% }); %>
+                        
+                        var summaryWS = XLSX.utils.aoa_to_sheet(semesterSummaryData);
+                        XLSX.utils.book_append_sheet(wb, summaryWS, "Tóm tắt học kỳ");
+                        console.log("Added semester summary sheet");
+                    <% } else { %>
+                        // No grades, just add an empty sheet
+                        var emptyGradesData = [
+                            ["BẢNG ĐIỂM CHI TIẾT SINH VIÊN <%= user.hovaten %>"],
+                            ["MSSV: <%= user.id %>"],
+                            [""],
+                            ["Chưa có dữ liệu điểm"]
+                        ];
+                        var emptyWS = XLSX.utils.aoa_to_sheet(emptyGradesData);
+                        XLSX.utils.book_append_sheet(wb, emptyWS, "Bảng điểm chi tiết");
+                        console.log("Added empty grades sheet");
+                    <% } %>
+
+                    // Generate a filename
+                    var fileName = "BangDiem_<%= user.id %>_<%= new Date().toISOString().slice(0,10) %>.xlsx";
+
+                    // Save the file
+                    console.log("Saving Excel file:", fileName);
+                    XLSX.writeFile(wb, fileName);
+                    console.log("Excel export complete");
+                } catch (error) {
+                    console.error("Error exporting to Excel:", error);
+                    alert("Có lỗi khi xuất file Excel: " + error.message);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

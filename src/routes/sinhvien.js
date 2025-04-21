@@ -575,13 +575,20 @@ router.get('/diem', requireStudentLogin, async (req, res) => {
         let totalPoints = 0;
         let totalCredits = 0;
         let passedCredits = 0;
+        let failedCredits = 0;
 
         grades.forEach(grade => {
-            if (grade.diemtongket !== null && grade.sotinchi !== null) {
+            if (grade.sotinchi && !isNaN(parseFloat(grade.sotinchi))) {
+                const credits = parseFloat(grade.sotinchi);
+                totalCredits += credits;
+
                 if (grade.trangthai === 'đạt') {
-                    totalPoints += grade.diemtongket * grade.sotinchi;
-                    totalCredits += parseInt(grade.sotinchi);
-                    passedCredits += parseInt(grade.sotinchi);
+                    passedCredits += credits;
+                    if (grade.diemtongket !== null) {
+                        totalPoints += grade.diemtongket * credits;
+                    }
+                } else if (grade.trangthai === 'học lại') {
+                    failedCredits += credits;
                 }
             }
         });
@@ -604,7 +611,8 @@ router.get('/diem', requireStudentLogin, async (req, res) => {
             gradesBySemester,
             gpa,
             totalCredits,
-            passedCredits
+            passedCredits,
+            failedCredits
         });
     } catch (error) {
         console.error('Lỗi tải điểm sinh viên:', error);
