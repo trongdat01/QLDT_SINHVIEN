@@ -12,13 +12,16 @@
             --sidebar-width: 280px;
             --topbar-height: 70px;
             --primary-color: #4e73df;
+            --primary-gradient: linear-gradient(to right, #1a237e, #283593);
             --secondary-color: #f8f9fc;
             --text-dark: #5a5c69;
+            --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --hover-transition: all 0.3s ease;
         }
 
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: var(--secondary-color);
+            background-color: #f3f4f6;
             color: var(--text-dark);
         }
 
@@ -31,12 +34,13 @@
         .sidebar {
             min-width: var(--sidebar-width);
             max-width: var(--sidebar-width);
-            background: var(--primary-color);
+            background: var(--primary-gradient);
             color: #fff;
-            transition: all 0.3s;
+            transition: var(--hover-transition);
             height: 100vh;
             position: fixed;
             z-index: 100;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar.collapsed {
@@ -47,44 +51,59 @@
             padding: 1.5rem 1rem;
             text-align: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
         }
 
         .sidebar .sidebar-header h3 {
             margin: 0;
             font-weight: 800;
             font-size: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .sidebar ul.components {
-            padding: 0;
+            padding: 1rem 0;
             margin: 0;
         }
 
         .sidebar ul li {
             list-style: none;
+            position: relative;
         }
 
         .sidebar ul li a {
-            padding: 1rem 1.5rem;
+            padding: 0.8rem 1.5rem;
             display: block;
-            color: #fff;
+            color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
-            transition: all 0.3s;
+            transition: var(--hover-transition);
             font-weight: 500;
+            border-left: 3px solid transparent;
         }
 
         .sidebar ul li a:hover {
             background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-left-color: #ffffff;
         }
 
         .sidebar ul li a i {
             margin-right: 10px;
             width: 20px;
             text-align: center;
+            font-size: 1.2rem;
         }
 
         .sidebar ul li.active a {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            border-left-color: #ffffff;
+        }
+
+        .sidebar ul.collapse {
+            background: rgba(0, 0, 0, 0.1);
+            padding-left: 1rem;
         }
 
         .content {
@@ -145,69 +164,167 @@
             padding: calc(var(--topbar-height) + 1.5rem) 1.5rem 1.5rem 1.5rem;
         }
 
-        .card {
+        .dashboard-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
             border: none;
-            box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);
-            border-radius: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .dashboard-card .card-body {
+            padding: 1.8rem;
+        }
+
+        .dashboard-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #4e73df;
+            background: rgba(78, 115, 223, 0.1);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            transition: all 0.3s;
+        }
+
+        .dashboard-card:hover .dashboard-icon {
+            transform: scale(1.1);
+            background: rgba(78, 115, 223, 0.2);
+        }
+
+        .dashboard-card .card-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.7rem;
+        }
+
+        .dashboard-card .card-text {
+            color: #666;
             margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .dashboard-card .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(26, 35, 126, 0.2);
+            transition: all 0.3s;
+        }
+
+        .dashboard-card .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(26, 35, 126, 0.3);
+        }
+
+        .stat-card {
+            padding: 1.8rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: transform 0.3s;
+        }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: -1;
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-7px);
+        }
+
+        .stat-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .stat-card.primary {
+            background: linear-gradient(135deg, #4e73df, #2e59d9);
+        }
+
+        .stat-card.success {
+            background: linear-gradient(135deg, #1cc88a, #13855c);
+        }
+
+        .stat-card.info {
+            background: linear-gradient(135deg, #36b9cc, #258391);
+        }
+
+        .stat-card.warning {
+            background: linear-gradient(135deg, #f6c23e, #dda20a);
+        }
+
+        .stat-card h2 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .stat-card p {
+            margin: 0;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .stat-card i {
+            font-size: 3rem;
+            opacity: 0.9;
         }
 
         .card-header {
             background-color: #f8f9fc;
             border-bottom: 1px solid #e3e6f0;
-            padding: 0.75rem 1.25rem;
+            padding: 1rem 1.5rem;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #4e73df;
-        }
-
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-card {
-            padding: 1.5rem;
-            border-radius: 0.35rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            color: white;
         }
 
-        .stat-card.primary {
-            background-color: #4e73df;
+        .card-header i {
+            margin-right: 10px;
         }
 
-        .stat-card.success {
-            background-color: #1cc88a;
+        .list-group-item {
+            border: none;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 1rem;
+            transition: background-color 0.3s;
         }
 
-        .stat-card.info {
-            background-color: #36b9cc;
+        .list-group-item:last-child {
+            border-bottom: none;
         }
 
-        .stat-card.warning {
-            background-color: #f6c23e;
-        }
-
-        .stat-card h2 {
-            margin: 0;
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .stat-card p {
-            margin: 0;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .stat-card i {
-            font-size: 2.5rem;
-            opacity: 0.8;
+        .list-group-item:hover {
+            background-color: #f8f9fc;
         }
 
         .footer {
@@ -215,39 +332,8 @@
             text-align: center;
             font-size: 0.9rem;
             color: #858796;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                margin-left: calc(-1 * var(--sidebar-width));
-            }
-
-            .sidebar.active {
-                margin-left: 0;
-            }
-
-            .content {
-                margin-left: 0;
-            }
-
-            .topbar {
-                width: 100%;
-            }
-        }
-
-        .dashboard-card {
-            transition: transform 0.3s;
-            margin-bottom: 20px;
-        }
-
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .dashboard-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #0d6efd;
+            background: white;
+            box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
@@ -291,7 +377,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-clipboard-list"></i> Quản lý điểm</a>
+                    <a href="/taikhoan/admin/manage-grades"><i class="fas fa-clipboard-list"></i> Quản lý điểm</a>
                 </li>
                 <li>
                     <a href="#scheduleSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -299,18 +385,18 @@
                     </a>
                     <ul class="collapse list-unstyled" id="scheduleSubmenu">
                         <li>
-                            <a href="#"><i class="fas fa-calendar-day"></i> Lịch học</a>
+                            <a href="/taikhoan/admin/lichhoc"><i class="fas fa-calendar-day"></i> Lịch học</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fas fa-calendar-check"></i> Lịch thi</a>
+                            <a href="/taikhoan/admin/lichthi"><i class="fas fa-calendar-check"></i> Lịch thi</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-money-bill-wave"></i> Quản lý tài chính</a>
+                    <a href="/taikhoan/admin/taichinh"><i class="fas fa-money-bill-wave"></i> Quản lý tài chính</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-cog"></i> Cài đặt hệ thống</a>
+                    <a href="/taikhoan/admin/settings"><i class="fas fa-cog"></i> Cài đặt hệ thống</a>
                 </li>
                 <li>
                     <a href="/taikhoan/dang-xuat"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
@@ -376,7 +462,9 @@
                         <div class="col-md-3">
                             <div class="card dashboard-card text-center h-100">
                                 <div class="card-body">
-                                    <i class="bi bi-people-fill dashboard-icon"></i>
+                                    <div class="dashboard-icon">
+                                        <i class="fas fa-user-shield"></i>
+                                    </div>
                                     <h5 class="card-title">Quản lý Admin</h5>
                                     <p class="card-text">Thêm, sửa, xóa tài khoản quản trị viên</p>
                                     <a href="/taikhoan/admin/manage-admins" class="btn btn-primary">Truy cập</a>
@@ -386,7 +474,9 @@
                         <div class="col-md-3">
                             <div class="card dashboard-card text-center h-100">
                                 <div class="card-body">
-                                    <i class="bi bi-mortarboard-fill dashboard-icon"></i>
+                                    <div class="dashboard-icon">
+                                        <i class="fas fa-user-graduate"></i>
+                                    </div>
                                     <h5 class="card-title">Quản lý Sinh viên</h5>
                                     <p class="card-text">Thêm, sửa, xóa thông tin sinh viên</p>
                                     <a href="/taikhoan/admin/manage-students" class="btn btn-primary">Truy cập</a>
@@ -396,7 +486,9 @@
                         <div class="col-md-3">
                             <div class="card dashboard-card text-center h-100">
                                 <div class="card-body">
-                                    <i class="bi bi-book-fill dashboard-icon"></i>
+                                    <div class="dashboard-icon">
+                                        <i class="fas fa-book"></i>
+                                    </div>
                                     <h5 class="card-title">Quản lý Học phần</h5>
                                     <p class="card-text">Quản lý học phần và đăng ký học phần</p>
                                     <a href="/taikhoan/admin/manage-courses" class="btn btn-primary">Truy cập</a>
@@ -406,7 +498,9 @@
                         <div class="col-md-3">
                             <div class="card dashboard-card text-center h-100">
                                 <div class="card-body">
-                                    <i class="bi bi-star-fill dashboard-icon"></i>
+                                    <div class="dashboard-icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
                                     <h5 class="card-title">Quản lý Điểm</h5>
                                     <p class="card-text">Quản lý điểm số của sinh viên</p>
                                     <a href="/taikhoan/admin/manage-grades" class="btn btn-primary">Truy cập</a>
@@ -419,7 +513,9 @@
                         <div class="col-md-3">
                             <div class="card dashboard-card text-center h-100">
                                 <div class="card-body">
-                                    <i class="bi bi-newspaper dashboard-icon"></i>
+                                    <div class="dashboard-icon">
+                                        <i class="fas fa-newspaper"></i>
+                                    </div>
                                     <h5 class="card-title">Quản lý Tin tức</h5>
                                     <p class="card-text">Thêm, sửa, xóa tin tức trên trang web</p>
                                     <a href="/taikhoan/admin/manage-news" class="btn btn-primary">Truy cập</a>
@@ -429,7 +525,9 @@
                         <div class="col-md-3">
                             <div class="card dashboard-card text-center h-100">
                                 <div class="card-body">
-                                    <i class="bi bi-bar-chart-fill dashboard-icon"></i>
+                                    <div class="dashboard-icon">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
                                     <h5 class="card-title">Thống kê Điểm</h5>
                                     <p class="card-text">Xem thống kê điểm theo lớp, khoa, môn học</p>
                                     <a href="/taikhoan/admin/grade-statistics" class="btn btn-primary">Truy cập</a>
@@ -439,7 +537,9 @@
                         <div class="col-md-3">
                             <div class="card dashboard-card text-center h-100">
                                 <div class="card-body">
-                                    <i class="bi bi-file-earmark-spreadsheet-fill dashboard-icon"></i>
+                                    <div class="dashboard-icon">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
                                     <h5 class="card-title">Báo cáo</h5>
                                     <p class="card-text">Tạo báo cáo tổng hợp về kết quả học tập</p>
                                     <a href="/taikhoan/admin/reports" class="btn btn-primary">Truy cập</a>
@@ -449,7 +549,9 @@
                         <div class="col-md-3">
                             <div class="card dashboard-card text-center h-100">
                                 <div class="card-body">
-                                    <i class="bi bi-gear-fill dashboard-icon"></i>
+                                    <div class="dashboard-icon">
+                                        <i class="fas fa-cog"></i>
+                                    </div>
                                     <h5 class="card-title">Cài đặt Hệ thống</h5>
                                     <p class="card-text">Quản lý cài đặt và cấu hình hệ thống</p>
                                     <a href="/taikhoan/admin/settings" class="btn btn-primary">Truy cập</a>

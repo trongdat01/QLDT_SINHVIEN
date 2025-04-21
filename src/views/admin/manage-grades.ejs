@@ -7,320 +7,635 @@
     <title>
         <%= title %> | Hệ thống Quản lý Đào tạo
     </title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --sidebar-width: 280px;
+            --topbar-height: 70px;
+            --primary-color: #4e73df;
+            --primary-gradient: linear-gradient(to right, #1a237e, #283593);
+            --secondary-color: #f8f9fc;
+            --text-dark: #5a5c69;
+            --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --hover-transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f3f4f6;
+            color: var(--text-dark);
+        }
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .sidebar {
+            min-width: var(--sidebar-width);
+            max-width: var(--sidebar-width);
+            background: var(--primary-gradient);
+            color: #fff;
+            transition: var(--hover-transition);
+            height: 100vh;
+            position: fixed;
+            z-index: 100;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar.collapsed {
+            margin-left: calc(-1 * var(--sidebar-width));
+        }
+
+        .sidebar .sidebar-header {
+            padding: 1.5rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .sidebar-header h3 {
+            margin: 0;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .sidebar ul.components {
+            padding: 1rem 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            list-style: none;
+            position: relative;
+        }
+
+        .sidebar ul li a {
+            padding: 0.8rem 1.5rem;
+            display: block;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: var(--hover-transition);
+            font-weight: 500;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar ul li a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-left-color: #ffffff;
+        }
+
+        .sidebar ul li a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .sidebar ul li.active a {
+            background: rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            border-left-color: #ffffff;
+        }
+
+        .sidebar ul.collapse {
+            background: rgba(0, 0, 0, 0.1);
+            padding-left: 1rem;
+        }
+
+        .content {
+            width: 100%;
+            min-height: 100vh;
+            transition: all 0.3s;
+            margin-left: var(--sidebar-width);
+        }
+
+        .content.full-width {
+            margin-left: 0;
+        }
+
+        .topbar {
+            height: var(--topbar-height);
+            background: #fff;
+            box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            position: fixed;
+            width: calc(100% - var(--sidebar-width));
+            z-index: 99;
+        }
+
+        .topbar.full-width {
+            width: 100%;
+        }
+
+        .topbar-nav {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .main-content {
+            padding: calc(var(--topbar-height) + 1.5rem) 1.5rem 1.5rem 1.5rem;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 0.75rem 0.75rem 0 0 !important;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-weight: 700;
+            color: #4e73df;
+        }
+
         .table-responsive {
             overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        .table th {
+            font-weight: 600;
+            color: #5a5c69;
+            background-color: #f8f9fc;
+            border-top: none;
+            padding: 1rem;
+        }
+
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-top: none;
+            background-color: white;
         }
 
         .action-buttons .btn {
             margin-right: 5px;
         }
 
-        .card {
-            margin-bottom: 20px;
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+            border-radius: 50px;
+            transition: all 0.2s;
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 30px;
+        .btn-primary {
+            background: linear-gradient(135deg, #4e73df, #224abe);
+            border: none;
+            box-shadow: 0 4px 10px rgba(78, 115, 223, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #224abe, #1a3a8e);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(78, 115, 223, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f6c23e, #dda20a);
+            border: none;
+            box-shadow: 0 4px 10px rgba(246, 194, 62, 0.2);
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #dda20a, #c69500);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(246, 194, 62, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74a3b, #c23321);
+            border: none;
+            box-shadow: 0 4px 10px rgba(231, 74, 59, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c23321, #9d1f11);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(231, 74, 59, 0.3);
         }
 
         .filter-row {
             margin-bottom: 15px;
         }
+
+        .modal-header {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .modal-content {
+            border-radius: 0.75rem;
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .footer {
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #858796;
+            margin-top: 2rem;
+        }
     </style>
 </head>
 
 <body>
-    <!-- Admin Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="/">Hệ thống Quản lý Đào tạo</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/taikhoan/admin/dashboard">Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/taikhoan/admin/manage-admins">Quản lý Admin</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/taikhoan/admin/manage-students">Quản lý Sinh viên</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/taikhoan/admin/manage-courses">Quản lý Học phần</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/taikhoan/admin/lichhoc">Quản lý Lịch Học</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/taikhoan/admin/manage-grades">Quản lý Điểm</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/taikhoan/admin/manage-news">Quản lý Tin tức</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle"></i>
-                            <% if (typeof user !=='undefined' ) { %>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>Quản lý Đào tạo</h3>
+            </div>
+
+            <ul class="components">
+                <li>
+                    <a href="/taikhoan/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Bảng điều khiển</a>
+                </li>
+                <li>
+                    <a href="#userSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-users"></i> Quản lý người dùng
+                    </a>
+                    <ul class="collapse list-unstyled" id="userSubmenu">
+                        <li>
+                            <a href="/taikhoan/admin/manage-admins"><i class="fas fa-user-shield"></i> Quản trị viên</a>
+                        </li>
+                        <li>
+                            <a href="/taikhoan/admin/manage-students"><i class="fas fa-user-graduate"></i> Sinh viên</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/taikhoan/admin/manage-news"><i class="fas fa-newspaper"></i> Quản lý tin tức</a>
+                </li>
+                <li>
+                    <a href="#courseSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-book"></i> Quản lý học phần
+                    </a>
+                    <ul class="collapse list-unstyled" id="courseSubmenu">
+                        <li>
+                            <a href="/taikhoan/admin/manage-courses"><i class="fas fa-list"></i> Đăng ký học phần</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a href="/taikhoan/admin/manage-grades"><i class="fas fa-clipboard-list"></i> Quản lý điểm</a>
+                </li>
+                <li>
+                    <a href="#scheduleSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-calendar-alt"></i> Lịch học - Lịch thi
+                    </a>
+                    <ul class="collapse list-unstyled" id="scheduleSubmenu">
+                        <li>
+                            <a href="/taikhoan/admin/lichhoc"><i class="fas fa-calendar-day"></i> Lịch học</a>
+                        </li>
+                        <li>
+                            <a href="/taikhoan/admin/lichthi"><i class="fas fa-calendar-check"></i> Lịch thi</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/taikhoan/admin/taichinh"><i class="fas fa-money-bill-wave"></i> Quản lý tài chính</a>
+                </li>
+                <li>
+                    <a href="/taikhoan/admin/settings"><i class="fas fa-cog"></i> Cài đặt hệ thống</a>
+                </li>
+                <li>
+                    <a href="/taikhoan/dang-xuat"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content" class="content">
+            <nav class="topbar">
+                <div class="topbar-nav">
+                    <button type="button" id="sidebarCollapse" class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="user-info">
+                        <img src="/images/default-avatar.png" alt="Admin Avatar">
+                        <div>
+                            <span>Xin chào, Admin</span>
+                            <div class="small">
                                 <%= user.email %>
-                                    <% } else { %>
-                                        Tài khoản
-                                        <% } %>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/taikhoan/admin/profile">Thông tin cá nhân</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="/taikhoan/dang-xuat">Đăng xuất</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container mt-4">
-        <h1 class="mb-4">Quản lý Điểm Sinh viên</h1>
-
-        <% if (error) { %>
-            <div class="alert alert-danger alert-dismissible fade show">
-                <%= error %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            <% } %>
-
-                <% if (success) { %>
-                    <div class="alert alert-success alert-dismissible fade show">
-                        <%= success %>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        </div>
                     </div>
-                    <% } %>
+                </div>
+            </nav>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="card-title mb-0">Thêm Điểm Mới</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <form id="addGradeForm" action="/taikhoan/admin/add-grade" method="POST"
-                                            class="row g-3">
-                                            <div class="col-md-4">
-                                                <label for="msv" class="form-label">Sinh Viên</label>
-                                                <select class="form-select" id="msv" name="msv" required>
-                                                    <option value="">Chọn sinh viên</option>
-                                                    <% students.forEach(student=> { %>
-                                                        <option value="<%= student.msv %>">
-                                                            <%= student.msv %> - <%= student.hovaten %>
-                                                        </option>
-                                                        <% }); %>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="hocphan" class="form-label">Học Phần</label>
-                                                <select class="form-select" id="hocphan" name="hocphan" required>
-                                                    <option value="">Chọn học phần</option>
-                                                    <% courses.forEach(course=> { %>
-                                                        <option value="<%= course.mahocphan %>">
-                                                            <%= course.mahocphan %> - <%= course.tenhocphan %>
-                                                        </option>
-                                                        <% }); %>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="hocki" class="form-label">Học Kỳ</label>
-                                                <select class="form-select" id="hocki" name="hocki" required>
-                                                    <option value="">Chọn học kỳ</option>
-                                                    <option value="1">Học kỳ 1</option>
-                                                    <option value="2">Học kỳ 2</option>
-                                                    <option value="3">Học kỳ 3</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="diemquatrinh" class="form-label">Điểm Quá Trình
-                                                    (30%)</label>
-                                                <input type="number" step="0.1" min="0" max="10" class="form-control"
-                                                    id="diemquatrinh" name="diemquatrinh"
-                                                    placeholder="Nhập điểm quá trình">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="diemthi" class="form-label">Điểm Thi (70%)</label>
-                                                <input type="number" step="0.1" min="0" max="10" class="form-control"
-                                                    id="diemthi" name="diemthi" placeholder="Nhập điểm thi">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <button type="submit" class="btn btn-primary mt-3">Thêm
-                                                    Điểm</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="main-content">
+                <div class="container-fluid">
+                    <h1 class="h3 mb-4 text-gray-800">Quản lý Điểm Sinh viên</h1>
+
+                    <% if (typeof error !=='undefined' && error) { %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <%= error %>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
+                        <% } %>
 
-                        <div class="card mt-4">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">Danh Sách Điểm</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row filter-row">
-                                    <div class="col-md-3">
-                                        <input type="text" id="searchInput" class="form-control"
-                                            placeholder="Tìm kiếm theo tên, mã SV...">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select id="studentFilter" class="form-select">
-                                            <option value="">Tất cả sinh viên</option>
-                                            <% let uniqueStudents=new Map(); %>
-                                                <% if (grades && grades.length> 0) { %>
-                                                    <% grades.forEach(grade=> { %>
-                                                        <% if (!uniqueStudents.has(grade.msv)) { %>
-                                                            <% uniqueStudents.set(grade.msv, grade.hovaten); %>
-                                                                <option value="<%= grade.msv %>">
-                                                                    <%= grade.msv %> - <%= grade.hovaten %>
-                                                                </option>
-                                                                <% } %>
+                            <% if (typeof success !=='undefined' && success) { %>
+                                <div class="alert alert-success alert-dismissible fade show">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <%= success %>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                                <% } %>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card shadow mb-4">
+                                                <div class="card-header">
+                                                    <h5 class="card-title mb-0">Thêm Điểm Mới</h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <form id="addGradeForm" action="/taikhoan/admin/add-grade"
+                                                        method="POST" class="row g-3">
+                                                        <div class="col-md-4">
+                                                            <label for="msv" class="form-label">Sinh Viên</label>
+                                                            <select class="form-select" id="msv" name="msv" required>
+                                                                <option value="">Chọn sinh viên</option>
+                                                                <% students.forEach(student=> { %>
+                                                                    <option value="<%= student.msv %>">
+                                                                        <%= student.msv %> - <%= student.hovaten %>
+                                                                    </option>
                                                                     <% }); %>
-                                                                        <% } %>
-                                        </select>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="hocphan" class="form-label">Học Phần</label>
+                                                            <select class="form-select" id="hocphan" name="hocphan"
+                                                                required>
+                                                                <option value="">Chọn học phần</option>
+                                                                <% courses.forEach(course=> { %>
+                                                                    <option value="<%= course.mahocphan %>">
+                                                                        <%= course.mahocphan %> - <%= course.tenhocphan
+                                                                                %>
+                                                                    </option>
+                                                                    <% }); %>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="hocki" class="form-label">Học Kỳ</label>
+                                                            <select class="form-select" id="hocki" name="hocki"
+                                                                required>
+                                                                <option value="">Chọn học kỳ</option>
+                                                                <option value="1">Học kỳ 1</option>
+                                                                <option value="2">Học kỳ 2</option>
+                                                                <option value="3">Học kỳ 3</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="diemquatrinh" class="form-label">Điểm Quá Trình
+                                                                (30%)</label>
+                                                            <input type="number" step="0.1" min="0" max="10"
+                                                                class="form-control" id="diemquatrinh"
+                                                                name="diemquatrinh" placeholder="Nhập điểm quá trình">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="diemthi" class="form-label">Điểm Thi
+                                                                (70%)</label>
+                                                            <input type="number" step="0.1" min="0" max="10"
+                                                                class="form-control" id="diemthi" name="diemthi"
+                                                                placeholder="Nhập điểm thi">
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn btn-primary mt-3">
+                                                                <i class="fas fa-plus"></i> Thêm Điểm
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <select id="courseFilter" class="form-select">
-                                            <option value="">Tất cả học phần</option>
-                                            <% courses.forEach(course=> { %>
-                                                <option value="<%= course.mahocphan %>">
-                                                    <%= course.mahocphan %>
-                                                </option>
-                                                <% }); %>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <select id="semesterFilter" class="form-select">
-                                            <option value="">Tất cả học kỳ</option>
-                                            <option value="1">Học kỳ 1</option>
-                                            <option value="2">Học kỳ 2</option>
-                                            <option value="3">Học kỳ 3</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <select id="statusFilter" class="form-select">
-                                            <option value="">Tất cả trạng thái</option>
-                                            <option value="đạt">Đạt</option>
-                                            <option value="học lại">Học lại</option>
-                                        </select>
-                                    </div>
-                                </div>
 
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover" id="gradesTable">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>STT</th>
-                                                <th>Mã SV</th>
-                                                <th>Họ và tên</th>
-                                                <th>Mã học phần</th>
-                                                <th>Tên học phần</th>
-                                                <th>Học kỳ</th>
-                                                <th>Điểm QT</th>
-                                                <th>Điểm thi</th>
-                                                <th>Điểm TK</th>
-                                                <th>Trạng thái</th>
-                                                <th>Thao tác</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% if (grades && grades.length> 0) { %>
-                                                <% grades.forEach((grade, index)=> { %>
-                                                    <tr>
-                                                        <td>
-                                                            <%= index + 1 %>
-                                                        </td>
-                                                        <td>
-                                                            <%= grade.msv %>
-                                                        </td>
-                                                        <td>
-                                                            <%= grade.hovaten %>
-                                                        </td>
-                                                        <td>
-                                                            <%= grade.hocphan %>
-                                                        </td>
-                                                        <td>
-                                                            <%= grade.tenhocphan %>
-                                                        </td>
-                                                        <td>
-                                                            <%= grade.hocki %>
-                                                        </td>
-                                                        <td>
-                                                            <%= grade.diemquatrinh !==null ?
-                                                                grade.diemquatrinh.toFixed(1) : '-' %>
-                                                        </td>
-                                                        <td>
-                                                            <%= grade.diemthi !==null ? grade.diemthi.toFixed(1) : '-'
-                                                                %>
-                                                        </td>
-                                                        <td>
-                                                            <% if (grade.diemtongket !==null) { %>
-                                                                <span
-                                                                    class="<%= grade.diemtongket >= 4.0 ? 'text-success' : 'text-danger' %>">
-                                                                    <%= grade.diemtongket.toFixed(1) %>
-                                                                </span>
-                                                                <% } else { %>
-                                                                    -
-                                                                    <% } %>
-                                                        </td>
-                                                        <td>
-                                                            <% if (grade.trangthai==='đạt' ) { %>
-                                                                <span class="badge bg-success">Đạt</span>
-                                                                <% } else if (grade.trangthai==='học lại' ) { %>
-                                                                    <span class="badge bg-danger">Học lại</span>
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">Danh Sách Điểm</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row filter-row">
+                                                <div class="col-md-3">
+                                                    <input type="text" id="searchInput" class="form-control"
+                                                        placeholder="Tìm kiếm theo tên, mã SV...">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <select id="studentFilter" class="form-select">
+                                                        <option value="">Tất cả sinh viên</option>
+                                                        <% let uniqueStudents=new Map(); %>
+                                                            <% if (grades && grades.length> 0) { %>
+                                                                <% grades.forEach(grade=> { %>
+                                                                    <% if (!uniqueStudents.has(grade.msv)) { %>
+                                                                        <% uniqueStudents.set(grade.msv, grade.hovaten);
+                                                                            %>
+                                                                            <option value="<%= grade.msv %>">
+                                                                                <%= grade.msv %> - <%= grade.hovaten %>
+                                                                            </option>
+                                                                            <% } %>
+                                                                                <% }); %>
+                                                                                    <% } %>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <select id="courseFilter" class="form-select">
+                                                        <option value="">Tất cả học phần</option>
+                                                        <% courses.forEach(course=> { %>
+                                                            <option value="<%= course.mahocphan %>">
+                                                                <%= course.mahocphan %>
+                                                            </option>
+                                                            <% }); %>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <select id="semesterFilter" class="form-select">
+                                                        <option value="">Tất cả học kỳ</option>
+                                                        <option value="1">Học kỳ 1</option>
+                                                        <option value="2">Học kỳ 2</option>
+                                                        <option value="3">Học kỳ 3</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <select id="statusFilter" class="form-select">
+                                                        <option value="">Tất cả trạng thái</option>
+                                                        <option value="đạt">Đạt</option>
+                                                        <option value="học lại">Học lại</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-hover" id="gradesTable">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>STT</th>
+                                                            <th>Mã SV</th>
+                                                            <th>Họ và tên</th>
+                                                            <th>Mã học phần</th>
+                                                            <th>Tên học phần</th>
+                                                            <th>Học kỳ</th>
+                                                            <th>Điểm QT</th>
+                                                            <th>Điểm thi</th>
+                                                            <th>Điểm TK</th>
+                                                            <th>Trạng thái</th>
+                                                            <th>Thao tác</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% if (grades && grades.length> 0) { %>
+                                                            <% grades.forEach((grade, index)=> { %>
+                                                                <tr>
+                                                                    <td>
+                                                                        <%= index + 1 %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= grade.msv %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= grade.hovaten %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= grade.hocphan %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= grade.tenhocphan %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= grade.hocki %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= grade.diemquatrinh !==null ?
+                                                                            grade.diemquatrinh.toFixed(1) : '-' %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= grade.diemthi !==null ?
+                                                                            grade.diemthi.toFixed(1) : '-' %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <% if (grade.diemtongket !==null) { %>
+                                                                            <span
+                                                                                class="<%= grade.diemtongket >= 4.0 ? 'text-success' : 'text-danger' %>">
+                                                                                <%= grade.diemtongket.toFixed(1) %>
+                                                                            </span>
+                                                                            <% } else { %>
+                                                                                -
+                                                                                <% } %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <% if (grade.trangthai==='đạt' ) { %>
+                                                                            <span class="badge bg-success">Đạt</span>
+                                                                            <% } else if (grade.trangthai==='học lại' )
+                                                                                { %>
+                                                                                <span class="badge bg-danger">Học
+                                                                                    lại</span>
+                                                                                <% } else { %>
+                                                                                    <span
+                                                                                        class="badge bg-secondary">Chưa
+                                                                                        có</span>
+                                                                                    <% } %>
+                                                                    </td>
+                                                                    <td class="action-buttons">
+                                                                        <button
+                                                                            class="btn btn-sm btn-primary edit-grade"
+                                                                            data-id="<%= grade.id %>">Sửa</button>
+                                                                        <button
+                                                                            class="btn btn-sm btn-danger delete-grade"
+                                                                            data-id="<%= grade.id %>"
+                                                                            data-msv="<%= grade.msv %>"
+                                                                            data-name="<%= grade.hovaten %>"
+                                                                            data-course="<%= grade.tenhocphan %>">Xóa</button>
+                                                                    </td>
+                                                                </tr>
+                                                                <% }); %>
                                                                     <% } else { %>
-                                                                        <span class="badge bg-secondary">Chưa
-                                                                            có</span>
+                                                                        <tr>
+                                                                            <td colspan="11" class="text-center">Chưa có
+                                                                                dữ liệu
+                                                                                điểm</td>
+                                                                        </tr>
                                                                         <% } %>
-                                                        </td>
-                                                        <td class="action-buttons">
-                                                            <button class="btn btn-sm btn-primary edit-grade"
-                                                                data-id="<%= grade.id %>">Sửa</button>
-                                                            <button class="btn btn-sm btn-danger delete-grade"
-                                                                data-id="<%= grade.id %>" data-msv="<%= grade.msv %>"
-                                                                data-name="<%= grade.hovaten %>"
-                                                                data-course="<%= grade.tenhocphan %>">Xóa</button>
-                                                        </td>
-                                                    </tr>
-                                                    <% }); %>
-                                                        <% } else { %>
-                                                            <tr>
-                                                                <td colspan="11" class="text-center">Chưa có dữ liệu
-                                                                    điểm</td>
-                                                            </tr>
-                                                            <% } %>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <div class="container">
+                    <span>© 2023 Hệ thống Quản lý Đào tạo Đại học. All rights reserved.</span>
+                </div>
+            </footer>
+        </div>
     </div>
 
     <!-- Edit Grade Modal -->
     <div class="modal fade" id="editGradeModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-warning text-white">
                     <h5 class="modal-title">Chỉnh sửa Điểm</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="editGradeForm" action="/taikhoan/admin/edit-grade" method="POST">
@@ -380,9 +695,10 @@
     <div class="modal fade" id="deleteGradeModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title">Xác nhận xóa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Bạn có chắc chắn muốn xóa điểm của sinh viên <span id="delete_student_name"></span> (<span
@@ -400,19 +716,16 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-light text-center text-lg-start mt-5">
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-            © 2023 Hệ thống Quản lý Đào tạo |
-            <a class="text-dark" href="/">home.com</a>
-        </div>
-    </footer>
-
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Toggle sidebar
+            document.getElementById('sidebarCollapse').addEventListener('click', function () {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+                document.getElementById('content').classList.toggle('full-width');
+                document.querySelector('.topbar').classList.toggle('full-width');
+            });
+
             // Edit grade functionality
             document.querySelectorAll('.edit-grade').forEach(button => {
                 button.addEventListener('click', function () {

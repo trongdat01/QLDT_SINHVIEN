@@ -14,13 +14,16 @@
             --sidebar-width: 280px;
             --topbar-height: 70px;
             --primary-color: #4e73df;
+            --primary-gradient: linear-gradient(to right, #1a237e, #283593);
             --secondary-color: #f8f9fc;
             --text-dark: #5a5c69;
+            --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --hover-transition: all 0.3s ease;
         }
 
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: var(--secondary-color);
+            background-color: #f3f4f6;
             color: var(--text-dark);
         }
 
@@ -33,12 +36,13 @@
         .sidebar {
             min-width: var(--sidebar-width);
             max-width: var(--sidebar-width);
-            background: var(--primary-color);
+            background: var(--primary-gradient);
             color: #fff;
-            transition: all 0.3s;
+            transition: var(--hover-transition);
             height: 100vh;
             position: fixed;
             z-index: 100;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar.collapsed {
@@ -49,48 +53,59 @@
             padding: 1.5rem 1rem;
             text-align: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
         }
 
         .sidebar .sidebar-header h3 {
             margin: 0;
             font-weight: 800;
             font-size: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .sidebar ul.components {
-            padding: 0;
+            padding: 1rem 0;
             margin: 0;
         }
 
         .sidebar ul li {
             list-style: none;
+            position: relative;
         }
 
         .sidebar ul li a {
-            padding: 1rem 1.5rem;
+            padding: 0.8rem 1.5rem;
             display: block;
-            color: #fff;
+            color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
-            transition: all 0.3s;
+            transition: var(--hover-transition);
             font-weight: 500;
+            border-left: 3px solid transparent;
         }
 
         .sidebar ul li a:hover {
             background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-left-color: #ffffff;
         }
 
         .sidebar ul li a i {
             margin-right: 10px;
             width: 20px;
             text-align: center;
+            font-size: 1.2rem;
         }
 
         .sidebar ul li.active a {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            border-left-color: #ffffff;
         }
 
         .sidebar ul.collapse {
-            background-color: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+            padding-left: 1rem;
         }
 
         .content {
@@ -153,18 +168,25 @@
 
         .card {
             border: none;
-            box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);
-            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+            border-radius: 0.75rem;
             margin-bottom: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
         }
 
         .card-header {
             background-color: #f8f9fc;
             border-bottom: 1px solid #e3e6f0;
-            padding: 0.75rem 1.25rem;
+            padding: 1rem 1.25rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-radius: 0.75rem 0.75rem 0 0 !important;
         }
 
         .card-header h5 {
@@ -174,21 +196,86 @@
         }
 
         .btn-add {
-            background-color: #1cc88a;
+            background: linear-gradient(135deg, #1cc88a, #13855c);
             color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(28, 200, 138, 0.2);
+            transition: all 0.3s;
         }
 
         .btn-add:hover {
-            background-color: #169b6b;
+            background: linear-gradient(135deg, #13855c, #0d6b47);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(28, 200, 138, 0.3);
         }
 
         .table-responsive {
             overflow-x: auto;
         }
 
-        .table-hover tbody tr:hover {
-            background-color: rgba(0, 0, 0, 0.02);
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        .table th {
+            font-weight: 600;
+            color: #5a5c69;
+            background-color: #f8f9fc;
+            border-top: none;
+            padding: 1rem;
+        }
+
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-top: none;
+            background-color: white;
+        }
+
+        .table tr:first-child td {
+            border-top: none;
+        }
+
+        .table-hover tbody tr {
+            transition: background-color 0.15s ease-in-out;
+        }
+
+        .table-hover tbody tr:hover td {
+            background-color: #f8f9fc;
+        }
+
+        .badge {
+            padding: 0.4rem 0.8rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            border-radius: 50px;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+            border-radius: 50px;
+            transition: all 0.2s;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74a3b, #c23321);
+            border: none;
+            box-shadow: 0 4px 10px rgba(231, 74, 59, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c23321, #9d1f11);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(231, 74, 59, 0.3);
         }
 
         .footer {
@@ -196,6 +283,64 @@
             text-align: center;
             font-size: 0.9rem;
             color: #858796;
+            background: white;
+            box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            border-radius: 1rem 1rem 0 0;
+            padding: 1.25rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.25rem;
+            border-radius: 0 0 1rem 1rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #5a5c69;
+        }
+
+        .form-control {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d3e2;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+        }
+
+        .alert {
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .alert-success {
+            background-color: #e6f8f3;
+            color: #169b6b;
+        }
+
+        .alert-danger {
+            background-color: #fce9e8;
+            color: #c23321;
         }
 
         @media (max-width: 768px) {
@@ -252,15 +397,12 @@
                     </a>
                     <ul class="collapse list-unstyled" id="courseSubmenu">
                         <li>
-                            <a href="#"><i class="fas fa-list"></i> Danh sách học phần</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fas fa-user-check"></i> Đăng ký học phần</a>
+                            <a href="/taikhoan/admin/manage-courses"><i class="fas fa-list"></i> Đăng ký học phần</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-clipboard-list"></i> Quản lý điểm</a>
+                    <a href="/taikhoan/admin/manage-grades"><i class="fas fa-clipboard-list"></i> Quản lý điểm</a>
                 </li>
                 <li>
                     <a href="#scheduleSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -271,15 +413,15 @@
                             <a href="/taikhoan/admin/lichhoc"><i class="fas fa-calendar-day"></i> Lịch học</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fas fa-calendar-check"></i> Lịch thi</a>
+                            <a href="/taikhoan/admin/lichthi"><i class="fas fa-calendar-check"></i> Lịch thi</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-money-bill-wave"></i> Quản lý tài chính</a>
+                    <a href="/taikhoan/admin/taichinh"><i class="fas fa-money-bill-wave"></i> Quản lý tài chính</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-cog"></i> Cài đặt hệ thống</a>
+                    <a href="/taikhoan/admin/settings"><i class="fas fa-cog"></i> Cài đặt hệ thống</a>
                 </li>
                 <li>
                     <a href="/taikhoan/dang-xuat"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
@@ -289,42 +431,6 @@
 
         <!-- Page Content -->
         <div id="content" class="content">
-            <!-- Navigation section -->
-            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                <div class="container">
-                    <a class="navbar-brand" href="/">Hệ thống Quản lý Đào tạo</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav me-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/taikhoan/admin/dashboard">Trang chủ</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="/taikhoan/admin/manage-admins">Quản lý Admin</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/taikhoan/admin/manage-students">Quản lý Sinh viên</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/taikhoan/admin/manage-courses">Quản lý Học phần</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/taikhoan/admin/lichhoc">Quản lý Lịch Học</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/taikhoan/admin/manage-grades">Quản lý Điểm</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/taikhoan/admin/manage-news">Quản lý Tin tức</a>
-                            </li>
-                        </ul>
-                        <!-- Rest of navigation -->
-                    </div>
-                </div>
-            </nav>
-
             <nav class="topbar">
                 <div class="topbar-nav">
                     <button type="button" id="sidebarCollapse" class="sidebar-toggle">
@@ -348,12 +454,14 @@
 
                     <% if (typeof success !=='undefined' && success) { %>
                         <div class="alert alert-success" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
                             <%= success %>
                         </div>
                         <% } %>
 
                             <% if (typeof error !=='undefined' && error) { %>
                                 <div class="alert alert-danger" role="alert">
+                                    <i class="fas fa-exclamation-circle me-2"></i>
                                     <%= error %>
                                 </div>
                                 <% } %>
