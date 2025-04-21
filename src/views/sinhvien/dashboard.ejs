@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 56px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #0d6efd, #0a58ca);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-text {
+            font-size: 1.5rem;
+            font-weight: 300;
+        }
+
+        .student-info {
+            font-size: 1.1rem;
+        }
+
+        .dashboard-card {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            border-radius: 0.5rem;
+            border: none;
+            height: 100%;
+            transition: transform 0.3s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            font-weight: 600;
+            background: #f1f5f9;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .card-icon {
+            background: #e6f1ff;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .card-icon i {
+            font-size: 1.5rem;
+            color: #0d6efd;
+        }
+
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            background: #e6f1ff;
+        }
+
+        .menu-icon i {
+            color: #0d6efd;
+        }
+
+        .quick-menu {
+            margin-bottom: 2rem;
+        }
+
+        .quick-link {
+            text-align: center;
+            margin-bottom: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .quick-link:hover {
+            transform: translateY(-3px);
+        }
+
+        .quick-link a {
+            color: #495057;
+            text-decoration: none;
+        }
+
+        .exam-item,
+        .class-item,
+        .news-item {
+            border-left: 3px solid #0d6efd;
+            padding-left: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .exam-item.urgent {
+            border-left-color: #dc3545;
+        }
+
+        .today-marker {
+            background-color: #dc3545;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .tomorrow-marker {
+            background-color: #fd7e14;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .financial-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .progress {
+            height: 10px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+
+        .img-fluid {
+            max-height: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-card {
+                margin-bottom: 1rem;
+            }
+
+            .student-info {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/sinhvien/dashboard">
+                <img src="/images/logo.png" alt="Logo" class="img-fluid mr-2">
+                Cổng Thông Tin Sinh Viên
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/sinhvien/dashboard">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sinhvien/thongtin">Thông tin cá nhân</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <%= user.hovaten %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/sinhvien/thongtin">Thông tin cá nhân</a>
+                            <a class="dropdown-item" href="/sinhvien/doimatkhau">Đổi mật khẩu</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/taikhoan/dang-xuat">Đăng xuất</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1>Xin chào, <%= user.hovaten %>!</h1>
+                    <p class="welcome-text">Chào mừng bạn đến với cổng thông tin sinh viên</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body student-info">
+                            <p class="mb-1"><strong>MSSV:</strong>
+                                <%= user.id %>
+                            </p>
+                            <p class="mb-1"><strong>Khoa:</strong>
+                                <%= user.khoa %>
+                            </p>
+                            <p class="mb-0"><strong>Niên khóa:</strong>
+                                <%= user.nienkhoa %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Quick Menu -->
+        <section class="quick-menu">
+            <div class="row">
+                <div class="col-3 col-md-2">
+                    <div class="quick-link">
+                        <a href="/sinhvien/lichhoc">
+                            <div class="menu-icon mx-auto">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <span>Lịch học</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-3 col-md-2">
+                    <div class="quick-link">
+                        <a href="/sinhvien/lichthi">
+                            <div class="menu-icon mx-auto">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <span>Lịch thi</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-3 col-md-2">
+                    <div class="quick-link">
+                        <a href="/sinhvien/diem">
+                            <div class="menu-icon mx-auto">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span>Điểm số</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-3 col-md-2">
+                    <div class="quick-link">
+                        <a href="/sinhvien/dangkyhocphan">
+                            <div class="menu-icon mx-auto">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <span>Đăng ký học</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-3 col-md-2">
+                    <div class="quick-link">
+                        <a href="/sinhvien/taichinh">
+                            <div class="menu-icon mx-auto">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <span>Tài chính</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-3 col-md-2">
+                    <div class="quick-link">
+                        <a href="/sinhvien/thongtin">
+                            <div class="menu-icon mx-auto">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span>Thông tin</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Content -->
+        <div class="row">
+            <!-- Upcoming Classes -->
+            <div class="col-md-6 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <span>Lịch học sắp tới</span>
+                    </div>
+                    <div class="card-body">
+                        <% if(upcomingClasses && upcomingClasses.length> 0) { %>
+                            <% upcomingClasses.forEach(function(classItem) { %>
+                                <div class="class-item">
+                                    <% if(classItem.isToday) { %>
+                                        <span class="today-marker">Hôm nay</span>
+                                        <% } else { %>
+                                            <span class="tomorrow-marker">Ngày mai</span>
+                                            <% } %>
+                                                <h6>
+                                                    <%= classItem.tenhocphan %>
+                                                </h6>
+                                                <p class="mb-0">
+                                                    <i class="far fa-clock mr-1"></i>
+                                                    <%= classItem.timeRange %>
+                                                        <i class="fas fa-map-marker-alt ml-2 mr-1"></i>
+                                                        <%= classItem.phonghoclythuyet %>
+                                                </p>
+                                                <small class="text-muted">Giảng viên: <%= classItem.giangvien %></small>
+                                </div>
+                                <% }); %>
+                                    <% } else { %>
+                                        <p class="text-center text-muted">Không có lịch học trong hôm nay và ngày mai.
+                                        </p>
+                                        <% } %>
+                                            <div class="text-center mt-3">
+                                                <a href="/sinhvien/lichhoc" class="btn btn-outline-primary btn-sm">Xem
+                                                    tất cả lịch học</a>
+                                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Exams -->
+            <div class="col-md-6 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="card-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <span>Lịch thi sắp tới</span>
+                    </div>
+                    <div class="card-body">
+                        <% if(upcomingExams && upcomingExams.length> 0) { %>
+                            <% upcomingExams.forEach(function(exam) { %>
+                                <% const examDate=new Date(exam.thoigianthi); const today=new Date(); const
+                                    diffTime=examDate - today; const diffDays=Math.ceil(diffTime / (1000 * 60 * 60 *
+                                    24)); const isUrgent=diffDays <=3; %>
+                                    <div class="exam-item <%= isUrgent ? 'urgent' : '' %>">
+                                        <h6>
+                                            <%= exam.tenhocphan %>
+                                        </h6>
+                                        <p class="mb-0">
+                                            <i class="far fa-calendar-alt mr-1"></i>
+                                            <%= exam.formattedDate %>
+                                                <i class="far fa-clock ml-2 mr-1"></i>
+                                                <%= exam.formattedTime %>
+                                        </p>
+                                        <p class="mb-0">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>
+                                            <%= exam.phongthi %>
+                                                <% if(isUrgent) { %>
+                                                    <span class="badge badge-danger ml-2">
+                                                        <%= diffDays <=0 ? 'Hôm nay' : `Còn ${diffDays} ngày` %>
+                                                    </span>
+                                                    <% } %>
+                                        </p>
+                                        <small class="text-muted">Hình thức: <%= exam.hinhthuathi %></small>
+                                    </div>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <p class="text-center text-muted">Không có lịch thi trong 7 ngày tới.</p>
+                                            <% } %>
+                                                <div class="text-center mt-3">
+                                                    <a href="/sinhvien/lichthi"
+                                                        class="btn btn-outline-primary btn-sm">Xem tất cả lịch thi</a>
+                                                </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Status -->
+            <div class="col-md-6 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="card-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <span>Trạng thái tài chính</span>
+                    </div>
+                    <div class="card-body">
+                        <% if(financialStatus) { %>
+                            <div class="financial-status">
+                                <div>
+                                    <h6>Tổng học phí:</h6>
+                                    <p>
+                                        <%= Number(financialStatus.khoanphainop).toLocaleString('vi-VN') %> VNĐ
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <h6>Đã thanh toán:</h6>
+                                    <p>
+                                        <%= Number(financialStatus.khoandanop).toLocaleString('vi-VN') %> VNĐ
+                                    </p>
+                                </div>
+                            </div>
+
+                            <% const totalAmount=parseFloat(financialStatus.khoanphainop); const
+                                paidAmount=parseFloat(financialStatus.khoandanop) +
+                                parseFloat(financialStatus.khoandocmien); const progress=Math.min(100, (paidAmount /
+                                totalAmount) * 100); let progressClass='bg-danger' ; if (progress>= 100) {
+                                progressClass = 'bg-success';
+                                } else if (progress > 50) {
+                                progressClass = 'bg-warning';
+                                }
+                                %>
+
+                                <div class="progress mb-2">
+                                    <div class="progress-bar <%= progressClass %>" role="progressbar"
+                                        style="width: <%= progress %>%" aria-valuenow="<%= progress %>"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <p class="text-center">
+                                    <% if (financialStatus.trangthai==='đã hoàn thành' ) { %>
+                                        <span class="badge badge-success">Đã hoàn thành</span>
+                                        <% } else { %>
+                                            <span class="badge badge-warning">Chưa hoàn thành</span>
+                                            <span class="ml-2">Còn lại: <%=
+                                                    Number(financialStatus.conlai).toLocaleString('vi-VN') %> VNĐ</span>
+                                            <% } %>
+                                </p>
+
+                                <div class="text-center mt-3">
+                                    <a href="/sinhvien/taichinh" class="btn btn-outline-primary btn-sm">Xem chi tiết tài
+                                        chính</a>
+                                </div>
+                                <% } else { %>
+                                    <p class="text-center text-muted">Chưa có thông tin tài chính.</p>
+                                    <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Latest News -->
+            <div class="col-md-6 mb-4">
+                <div class="card dashboard-card">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="card-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <span>Tin tức mới nhất</span>
+                    </div>
+                    <div class="card-body">
+                        <% if(latestNews && latestNews.length> 0) { %>
+                            <% latestNews.forEach(function(news) { %>
+                                <div class="news-item">
+                                    <h6>
+                                        <%= news.tieude %>
+                                    </h6>
+                                    <p class="mb-0">
+                                        <span class="badge badge-info mr-2">
+                                            <%= news.danhmuc %>
+                                        </span>
+                                        <small class="text-muted">
+                                            <%= new Date(news.ngaydang).toLocaleDateString('vi-VN') %>
+                                        </small>
+                                    </p>
+                                    <a href="<%= news.linkbaidang %>" target="_blank"
+                                        class="btn btn-link btn-sm p-0">Xem chi tiết</a>
+                                </div>
+                                <% }); %>
+                                    <% } else { %>
+                                        <p class="text-center text-muted">Không có tin tức mới.</p>
+                                        <% } %>
+                                            <div class="text-center mt-3">
+                                                <a href="/sinhvien/tintuc" class="btn btn-outline-primary btn-sm">Xem
+                                                    tất cả tin tức</a>
+                                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Cổng Thông Tin Sinh Viên</h5>
+                    <p class="mb-0">© <%= new Date().getFullYear() %> Bản quyền thuộc về Trường Đại học...</p>
+                </div>
+                <div class="col-md-6 text-md-right">
+                    <h5>Liên hệ</h5>
+                    <p class="mb-0">Email: support@example.edu.vn</p>
+                    <p class="mb-0">Hotline: 1900 xxxx</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
